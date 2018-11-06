@@ -14,7 +14,7 @@ path = helper.path
 
 def compute_diameter(algorithm, solver, start, end):
 
-    alg = importlib.import_module("." + algorithm, package="algorithms")
+    alg = importlib.import_module("." + algorithm, package = "algorithms")
 
     local = alg.local
     params = alg.params
@@ -23,7 +23,6 @@ def compute_diameter(algorithm, solver, start, end):
     initial = alg.initial
     L = alg.L
     constraints = alg.constraints
-    properties = alg.properties
     phase = alg.phase
 
     

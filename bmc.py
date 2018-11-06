@@ -52,11 +52,9 @@ def bounded_model_checking(algorithm, solver, diam):
 
     if round_constraint != []:    
         smt_path += path(length + phase, 2 * length + phase, local, rules, "c", "t", constraints, L)
-        # smt_path += path(length + phase, length + phase, local, rules, "c", "t", constraints, senders)
         smt_path += magic_round(length, local, rules, "c", "t", constraints, L, round_constraint, phase) + "\n"
         
         length = 2 * length + phase
-        # length = length + phase
         
     smt_file.write(smt_path)
 
@@ -78,10 +76,7 @@ def bounded_model_checking(algorithm, solver, diam):
     output = smt.communicate()[0]
     
     result = ""
-    # print(output)
     results = output.split()
-    # print(results)
-    # print(str(len(properties)) + ", " + str(len(results)))
     if len(results) == len(properties):
         for i in range(len(results)):
             if results[i] == "unsat":
@@ -93,5 +88,3 @@ def bounded_model_checking(algorithm, solver, diam):
     else:
         result = "SMT solver reported an error\n"
     return result
-
-
