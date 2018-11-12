@@ -2,7 +2,7 @@ import os
 import importlib
 import subprocess
 import helper
-import algorithms
+# import algorithms
 
 introduction = helper.introduction
 assertion = helper.assertion
@@ -10,9 +10,9 @@ initial_condition = helper.initial_condition
 diameter_query = helper.diameter_query
 path = helper.path
 
-def compute_diameter(algorithm, solver, start, end):
+def compute_diameter(algorithm, pkg, solver, start, end):
 
-    alg = importlib.import_module("." + algorithm, package = "algorithms")
+    alg = importlib.import_module("." + algorithm, package = pkg)
 
     local = alg.local
     params = alg.params

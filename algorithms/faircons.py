@@ -29,15 +29,15 @@ rules.append({'idx': 18, 'from': 9, 'to': 10, 'guard': "true"})
 rules.append({'idx': 19, 'from': 10, 'to': 10, 'guard': "true"})
 
 # parameters, resilience condition
-params = ["n", "t"]
+params = ["n", "t", "f"]
 active = "n"
-rc = ["(> n 0)", "(>= t 0)", "(> n t)"]
+rc = ["(> n 0)", "(>= t 0)", "(> n t)", "(>= t f)"]
 
 # faults
 faults = "crash"
 faulty = [5, 6, 7, 8, 9, 10]
 crashed = [3, 4, 5]
-max_faulty = "t"
+max_faulty = "f"
 phase = 1
 
 # configuration/transition constraints

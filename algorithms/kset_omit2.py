@@ -21,14 +21,14 @@ rules.append({'idx': 10, 'from': 5, 'to': 4, 'guard': "(and (>= (+ x1 f1) 1) (< 
 rules.append({'idx': 11, 'from': 5, 'to': 5, 'guard': "(< (+ x0 x1) 1)"})
 
 # parameters, resilience condition
-params = ["n", "t"]
+params = ["n", "t", "f"]
 active = "n"
-rc = ["(> n 0)", "(>= t 0)", "(> n t)"]
+rc = ["(> n 0)", "(>= t 0)", "(> n t)", "(>= t f)"]
 
 # faults
 faults = "send omission"
 faulty = [3, 4, 5]
-max_faulty = "t"
+max_faulty = "f"
 phase = 1
 
 # configuration/transition constraints

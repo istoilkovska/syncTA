@@ -4,7 +4,7 @@ import helper
 import importlib
 import math
 import diameter
-import algorithms
+# import algorithms
 
 introduction = helper.introduction
 assertion = helper.assertion
@@ -13,9 +13,9 @@ property_check = helper.property_check
 path = helper.path
 magic_round = helper.magic_round
 
-def bounded_model_checking(algorithm, solver, diam):    
+def bounded_model_checking(algorithm, pkg, solver, diam):    
 
-    alg = importlib.import_module("." + algorithm, package="algorithms")
+    alg = importlib.import_module("." + algorithm, package=pkg)
 
     local = alg.local
     params = alg.params

@@ -19,7 +19,7 @@ rules.append({'idx': 7, 'from': 1, 'to': 3, 'guard': "(>= (+ x f) (- n t))"})
 # parameters, resilience condition
 params = ["n", "t", "f"]
 active = "(- n f)"
-rc = ["(> n 0)", "(>= t 0)", "(>= f 0)", "(> n (* 3 t))", "(>= t f)"]
+rc = ["(> n 0)", "(>= t 0)", "(>= f 0)", "(>= n (* 3 t))", "(> f t)"]
 phase = 1
 
 # faults
