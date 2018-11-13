@@ -4,7 +4,6 @@ import helper
 import importlib
 import math
 import diameter
-# import algorithms
 
 introduction = helper.introduction
 assertion = helper.assertion

@@ -23,8 +23,8 @@ rc = ["(> n 0)", "(>= t 0)", "(> n t)", "(>= t f)"]
 
 # faults
 faults = "crash"
-faulty = [3, 4, 5, 6]
-crashed = [3, 4, 5]
+faulty = [2, 3, 4]
+crashed = [2, 3]
 max_faulty = "f"
 phase = 1
 
