@@ -10,7 +10,7 @@ assertion = helper.assertion
 initial_condition = helper.initial_condition
 property_check = helper.property_check
 path = helper.path
-magic_round = helper.magic_round
+special_round = helper.special_round
 
 def bounded_model_checking(algorithm, pkg, solver, diam):    
 
@@ -39,7 +39,7 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
 
     round_constraint = [c for c in constraints if c['type'] == "round"]
 
-    length = diam * phase
+    length = diam
 
     smt_path = path(0, length, local, rules, "c", "t", constraints, L)
     smt_path += assertion(initial_condition(initial, "c", constraints))
@@ -50,7 +50,7 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
 
     if round_constraint != []:    
         smt_path += path(length + phase, 2 * length + phase, local, rules, "c", "t", constraints, L)
-        smt_path += magic_round(length, local, rules, "c", "t", constraints, L, round_constraint, phase) + "\n"
+        smt_path += special_round(length, local, rules, "c", "t", constraints, L, round_constraint, phase) + "\n"
         
         length = 2 * length + phase
         
@@ -68,9 +68,7 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
         smt = subprocess.Popen(["cvc4", "--lang", "smt2", "--incremental", file_name], stdout=subprocess.PIPE)
     elif solver == "z3":
         smt = subprocess.Popen(["z3", "-smt2", file_name], stdout=subprocess.PIPE)
-    elif solver == "vampire":
-        smt = subprocess.Popen(["vampire", "--input-syntax", "smtlib2", file_name], stdout=subprocess.PIPE)
-
+    
     output = smt.communicate()[0]
     
     result = ""

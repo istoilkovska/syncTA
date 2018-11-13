@@ -38,8 +38,8 @@ for alg in alg_list:
     bmc_time = time.time() - start
     print(result)
     output.write(result)
-    pretty_time = "%s%s" % (time.strftime("%M:%S", time.gmtime(bmc_time)), str(bmc_time)[1:])
-    output.write("\ttime to check properties: \t" + pretty_time + "\n")
+    pretty_time = "%s%s" % (time.strftime("%H:%M:%S", time.gmtime(bmc_time)), str(bmc_time)[str(bmc_time).index("."):8])
+    output.write("\ttime to check properties: \t" + pretty_time + "\n\n")
 
     print(alg + " done!\n\n")
 

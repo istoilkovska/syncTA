@@ -71,4 +71,4 @@ def compute_diameter(algorithm, pkg, solver, start, end):
         print("The diameter is not between " + str(start) + " and " + str(end))
         return -1
 
-    return diam
+    return diam * phase

@@ -37,7 +37,7 @@ for alg in alg_list:
     diam_time = time.time() - start
     print("Diameter " + str(diam) + "\n")
     print(diam_time)
-    pretty_time = "%s%s" % (time.strftime("%M:%S", time.gmtime(diam_time)), str(diam_time)[str(diam_time).index("."):])
+    pretty_time = "%s%s" % (time.strftime("%H:%M:%S", time.gmtime(diam_time)), str(diam_time)[str(diam_time).index("."):8])
     output.write("diameter: \t" + str(diam) + "\n\ttime to compute diameter: \t" + pretty_time + "\n\n")
 
     output.write("bounded model checking results:\n")
@@ -46,12 +46,8 @@ for alg in alg_list:
     bmc_time = time.time() - start
     print(result)
     output.write(result)
-    pretty_time = "%s%s" % (time.strftime("%M:%S", time.gmtime(bmc_time)), str(bmc_time)[1:])
-    output.write("\ttime to check properties: \t" + pretty_time + "\n")
-
-    total_time = time.time() - start_time
-    pretty_time = "%s%s" % (time.strftime("%M:%S", time.gmtime(total_time)), str(total_time)[1:])
-    output.write("\ttotal time: \t\t\t\t" + pretty_time + "\n\n\n")
+    pretty_time = "%s%s" % (time.strftime("%H:%M:%S", time.gmtime(bmc_time)), str(bmc_time)[str(bmc_time).index("."):8])
+    output.write("\ttime to check properties: \t" + pretty_time + "\n\n")
 
     print(alg + " done!\n\n")
 

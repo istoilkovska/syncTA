@@ -165,37 +165,11 @@ def diameter_query(start, diam, phase, length, local_list, rule_list, other_conf
     result += ")\n"
     result += diameter_conclusion(start, diam * phase + 1, phase, length, local_list, other_conf_symbol, conf_symbol)
     result += ")\n)\n"
-
-
     return result
-    # result = "(forall ("
-    # for i in range(idx + 1):
-    #     for j in local_list:
-    #         result += "(" + conf_symbol + str(i) + "_" + str(j) + " Int) "
-    #     if i < idx:
-    #         for k in rule_list:
-    #             result += "(r" + str(i) + "_" + str(k["idx"]) + " Int) "
-    # result = result.strip() + ")\n"
-    # result += matrix + ")\n"
-    # return result
-
-# def diameter_premise(diam, local_list, rule_list, other_conf_symbol, conf_symbol, trans_symbol, L, constraints):
-#     result = "(and\n"    
-#     result += non_negative(0, diam + 1, len(local_list), "d")
-#     result += non_negative(0, diam, len(rule_list), "r")
-#     result += counter_constraints(0, diam, "d", "r", constraints)
-#     for i in local_list:
-#         result += "(= " + other_conf_symbol + "0_" + str(i) + " " + conf_symbol + "0_" + str(i) + ")\n"
-#     result += "\n"
-#     result += guards(0, diam, rule_list, L, conf_symbol, trans_symbol)
-#     result += enabled(0, diam, local_list, rule_list, conf_symbol, trans_symbol)
-#     result += effect(0, diam, local_list, rule_list, conf_symbol, trans_symbol)
-#     result += ")\n"
-#     return result
 
 def diameter_conclusion(start, end, phase, length, local_list, other_conf_symbol, conf_symbol):    
     result = "(and\n"
-    for i in range(start, end):#, phase):
+    for i in range(start, end):
         result += "(or\n"
         for j in local_list:
             result += "(not (= " + other_conf_symbol + str(length) + "_" + str(j) + " " + conf_symbol + str(i) + "_" + str(j) + "))\n" 
@@ -282,7 +256,7 @@ def path(start, end, local_list, rule_list, conf_symbol, trans_symbol, constrain
     return result 
 
 
-def magic_round(r, local_list, rule_list, conf_symbol, trans_symbol, constraints, L, r_constraint, phase):
+def special_round(r, local_list, rule_list, conf_symbol, trans_symbol, constraints, L, r_constraint, phase):
     constants = ""
     result = ""
     round_constraint = ""
