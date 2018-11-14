@@ -34,7 +34,7 @@ constraints = []
 constraints.append({'type': 'configuration', 'sum': 'eq', 'object': local, 'result': active})
 constraints.append({'type': 'configuration', 'sum': 'le', 'object': faulty, 'result': max_faulty})
 constraints.append({'type': 'transition', 'sum': 'eq', 'object': range(len(rules)), 'result': active})
-constraints.append({'type': 'round', 'sum': 'eq', 'object': crashed, 'result': 0})
+# SPECIAL ROUND CONSTRAINT OMITTED
 
 properties = []
 properties.append({'name':'validity0', 'initial':'(= v0 0)', 'qf':'last', 'reachable':'(> x0 0)'})
