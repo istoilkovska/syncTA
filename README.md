@@ -19,12 +19,12 @@ There are three packages:
 <h3>Running the experiments</h3>
 You can check the safety of the encoded algorithms by 
 <code>
-$ python run.py 'solver'
+$ python run.py solver
 </code>
 
 You can check that the erroneous versions contain counterexamples by 
 <code>
-$ python run_counterexamples.py 'solver'
+$ python run_counterexamples.py solver
 </code>
 
-In both cases, <code>'solver'</code> is either <code>'z3'</code> or <code>'cvc4'</code>.
+In both cases, <code>'solver'</code> is either <code>z3</code> or <code>cvc4</code>.
