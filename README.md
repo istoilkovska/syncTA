@@ -27,4 +27,4 @@ You can check that the erroneous versions contain counterexamples by
 $ python run_counterexamples.py solver
 </code>
 
-In both cases, <code>'solver'</code> is either <code>z3</code> or <code>cvc4</code>.
+In both cases, <code>solver</code> is either <code>z3</code> or <code>cvc4</code>.
