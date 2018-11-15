@@ -256,7 +256,7 @@ def path(start, end, local_list, rule_list, conf_symbol, trans_symbol, constrain
     return result 
 
 
-def special_round(r, local_list, rule_list, conf_symbol, trans_symbol, constraints, L, r_constraint, phase):
+def clean_round(r, local_list, rule_list, conf_symbol, trans_symbol, constraints, L, r_constraint, phase):
     constants = ""
     result = ""
     round_constraint = ""

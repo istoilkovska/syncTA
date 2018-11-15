@@ -10,7 +10,7 @@ assertion = helper.assertion
 initial_condition = helper.initial_condition
 property_check = helper.property_check
 path = helper.path
-special_round = helper.special_round
+clean_round = helper.clean_round
 
 def bounded_model_checking(algorithm, pkg, solver, diam):    
 
@@ -50,7 +50,7 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
 
     if round_constraint != []:    
         smt_path += path(length + phase, 2 * length + phase, local, rules, "c", "t", constraints, L)
-        smt_path += special_round(length, local, rules, "c", "t", constraints, L, round_constraint, phase) + "\n"
+        smt_path += clean_round(length, local, rules, "c", "t", constraints, L, round_constraint, phase) + "\n"
         
         length = 2 * length + phase
         

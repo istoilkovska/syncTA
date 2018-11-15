@@ -10,7 +10,7 @@ rules = []
 rules.append({'idx': 0, 'from': 0, 'to': 0, 'guard': "true"})
 rules.append({'idx': 1, 'from': 1, 'to': 0, 'guard': "(>= (+ x0 cr0) 1)"})
 rules.append({'idx': 2, 'from': 1, 'to': 1, 'guard': "(< x0 1)"})
-rules.append({'idx': 3, 'from': 0, 'to': 2, 'guard': "true"})
+rules.append({'idx': 3, 'from': 0, 'to': 2, 'guard': "true"})   
 rules.append({'idx': 4, 'from': 1, 'to': 2, 'guard': "(>= (+ x0 cr0) 1)"})
 rules.append({'idx': 5, 'from': 1, 'to': 3, 'guard': "(< x0 1)"})
 rules.append({'idx': 6, 'from': 2, 'to': 4, 'guard': "true"})
