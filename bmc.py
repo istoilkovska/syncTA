@@ -130,24 +130,13 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
     str_result = ""
     for p in properties:
         lres = result[p['name']]
-        if p['spec'] == 'safety':
-            if 'sat' in lres:
-                str_result += p['name'] + " is violated\n"
-            elif 'unsat' not in lres:
-                str_result += p['name'] + " cannot be checked\n"
-            else:
-                str_result += p['name'] + " holds\n"
-        elif p['spec'] == 'liveness':
-            if 'unsat' not in lres:
-                str_result += p['name'] + " is violated\n"
-            elif 'sat' not in lres:
-                str_result += p['name'] + " cannot be checked\n"
-            else:
-                str_result += p['name'] + " holds\n"
+        
+        if 'sat' in lres:
+            str_result += p['name'] + " is violated\n"
+        elif 'unsat' not in lres:
+            str_result += p['name'] + " cannot be checked\n"
+        else:
+            str_result += p['name'] + " holds\n"
 
     
     return str_result
-
-
-
-# print(bounded_model_checking("floodmin1", "algorithms", "z3", 2))
