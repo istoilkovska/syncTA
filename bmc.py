@@ -39,48 +39,115 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
 
     round_constraint = [c for c in constraints if c['type'] == "round"]
 
-    length = diam
+    maxlength = diam 
 
-    smt_path = path(0, length, local, rules, "c", "t", constraints, L)
-    smt_path += assertion(initial_condition(initial, "c", constraints))
-    
-    smt_file.write(intro)
-
-    
-
-    if round_constraint != []:    
-        smt_path += path(length + phase, 2 * length + phase, local, rules, "c", "t", constraints, L)
-        smt_path += clean_round(length, local, rules, "c", "t", constraints, L, round_constraint, phase) + "\n"
-        
-        length = 2 * length + phase
-        
-    smt_file.write(smt_path)
-
+    result = {}
     for p in properties:
-        s = ""
-        s += assertion(property_check(0, length, phase, "c", p, L)) + "\n"
-        s = "(push)\n" + s + "(check-sat)\n" + "(pop)\n"
-        smt_file.write(s)
-        
-    smt_file.close()
+        result[p['name']] = []
 
-    if solver == "cvc4":
-        smt = subprocess.Popen(["cvc4", "--lang", "smt2", "--incremental", file_name], stdout=subprocess.PIPE)
-    elif solver == "z3":
-        smt = subprocess.Popen(["z3", "-smt2", file_name], stdout=subprocess.PIPE)
+    if round_constraint == []: 
+        for length in range(phase, maxlength + 1, phase):
+            
+            smt_file = open(file_name, "w")
+            
+            smt_path = path(0, length, local, rules, "c", "t", constraints, L)
+            smt_path += assertion(initial_condition(initial, "c", constraints)) 
+        
+            smt_file.write(intro)    
+            smt_file.write(smt_path)
+
+            for p in properties:
+                s = ""
+                s += assertion(property_check(0, length, phase, "c", p, L)) + "\n"
+                s = "(push)\n" + s + "(check-sat)\n" + "(pop)\n"
+                smt_file.write(s)
+            
+            smt_file.close()
+
+            if solver == "cvc4":
+                smt = subprocess.Popen(["cvc4", "--lang", "smt2", "--incremental", file_name], stdout=subprocess.PIPE)
+            elif solver == "z3":
+                smt = subprocess.Popen(["z3", "-smt2", file_name], stdout=subprocess.PIPE)
+            
+            output = smt.communicate()[0]
+            results = output.split()
     
-    output = smt.communicate()[0]
-    
-    result = ""
-    results = output.split()
-    if len(results) == len(properties):
-        for i in range(len(results)):
-            if results[i] == "unsat":
-                result += properties[i]["name"] + " holds\n"
-            elif results[i] == "sat":
-                result += properties[i]["name"] + " is violated\n"
+            if len(results) == len(properties):
+                for i in range(len(results)):
+                    if results[i] == "unsat" or results[i] == "sat":
+                        result['' + properties[i]["name"]].append(results[i])
+                    else:
+                        result['' + properties[i]["name"]].append('no result')
             else:
-                result += properties[i]["name"] + " cannot be checked\n"
+                print("SMT solver reported an error")
+                exit()
+            
+
     else:
-        result = "SMT solver reported an error\n"
-    return result
+        for length1 in range(phase, maxlength  + 1, phase):
+            for length2 in range(phase, maxlength  + 1, phase):
+                total = length1 + length2 + phase
+
+                smt_file = open(file_name, "w")
+            
+
+                smt_path = path(0, length1, local, rules, "c", "t", constraints, L)
+                smt_path += assertion(initial_condition(initial, "c", constraints)) 
+        
+                smt_file.write(intro)    
+
+                smt_path += path(length1 + phase, total, local, rules, "c", "t", constraints, L)
+                smt_path += clean_round(length1, local, rules, "c", "t", constraints, L, round_constraint, phase) + "\n"
+                
+                smt_file.write(smt_path)
+
+                for p in properties:
+                    s = ""
+                    s += assertion(property_check(0, total, phase, "c", p, L)) + "\n"
+                    s = "(push)\n" + s + "(check-sat)\n" + "(pop)\n"
+                    smt_file.write(s)
+                
+                smt_file.close()
+
+                if solver == "cvc4":
+                    smt = subprocess.Popen(["cvc4", "--lang", "smt2", "--incremental", file_name], stdout=subprocess.PIPE)
+                elif solver == "z3":
+                    smt = subprocess.Popen(["z3", "-smt2", file_name], stdout=subprocess.PIPE)
+    
+                output = smt.communicate()[0]
+                results = output.split()
+        
+                if len(results) == len(properties):
+                    for i in range(len(results)):
+                        if results[i] == "unsat" or results[i] == "sat":
+                            result['' + properties[i]["name"]].append(results[i])
+                        else:
+                            result['' + properties[i]["name"]].append('no result')
+                else:
+                    print("SMT solver reported an error")
+                    exit()
+    
+    str_result = ""
+    for p in properties:
+        lres = result[p['name']]
+        if p['spec'] == 'safety':
+            if 'sat' in lres:
+                str_result += p['name'] + " is violated\n"
+            elif 'unsat' not in lres:
+                str_result += p['name'] + " cannot be checked\n"
+            else:
+                str_result += p['name'] + " holds\n"
+        elif p['spec'] == 'liveness':
+            if 'unsat' not in lres:
+                str_result += p['name'] + " is violated\n"
+            elif 'sat' not in lres:
+                str_result += p['name'] + " cannot be checked\n"
+            else:
+                str_result += p['name'] + " holds\n"
+
+    
+    return str_result
+
+
+
+# print(bounded_model_checking("floodmin1", "algorithms", "z3", 2))

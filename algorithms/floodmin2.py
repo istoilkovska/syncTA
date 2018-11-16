@@ -44,7 +44,7 @@ constraints.append({'type': 'transition', 'sum': 'eq', 'object': range(len(rules
 constraints.append({'type': 'round', 'sum': 'le', 'object': crashed, 'result': 1})
 
 properties = []
-properties.append({'name':'validity0', 'initial':'(= v0 0)', 'qf':'last', 'reachable':'(> x0 0)'})
-properties.append({'name':'validity1', 'initial':'(= v1 0)', 'qf':'last', 'reachable':'(> x1 0)'})
-properties.append({'name':'validity2', 'initial':'(= v2 0)', 'qf':'last', 'reachable':'(> x2 0)'})
-properties.append({'name':'agreement', 'initial':'true', 'qf':'last', 'reachable':'(and (> x0 0) (> x1 0) (> x2 0))'})
+properties.append({'name':'validity0', 'spec':'safety', 'initial':'(= v0 0)', 'qf':'last', 'reachable':'(> x0 0)'})
+properties.append({'name':'validity1', 'spec':'safety', 'initial':'(= v1 0)', 'qf':'last', 'reachable':'(> x1 0)'})
+properties.append({'name':'validity2', 'spec':'safety', 'initial':'(= v2 0)', 'qf':'last', 'reachable':'(> x2 0)'})
+properties.append({'name':'agreement', 'spec':'safety', 'initial':'true', 'qf':'last', 'reachable':'(and (> x0 0) (> x1 0) (> x2 0))'})

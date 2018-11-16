@@ -33,5 +33,5 @@ constraints.append({'type': 'transition', 'sum': 'eq', 'object': range(len(rules
 
 # properties
 properties = []
-properties.append({'name':"unforgeability", 'initial':"(= x 0)", 'qf':'some', 'reachable':"(> acc 0)"})
-properties.append({'name':"correctness", 'initial':"(= x (- n f))", 'qf':'all', 'reachable':"(< acc (- n f))"})
+properties.append({'name':"unforgeability", 'spec':'safety', 'initial':"(= x 0)", 'qf':'some', 'reachable':"(> acc 0)"})
+properties.append({'name':"correctness", 'spec':'liveness', 'initial':"(= x (- n f))", 'qf':'all', 'reachable':"(< acc (- n f))"})

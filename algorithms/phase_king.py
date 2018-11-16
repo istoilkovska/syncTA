@@ -132,6 +132,6 @@ constraints.append({'type': 'transition', 'sum': 'eq', 'object': range(len(rules
 constraints.append({'type': 'round', 'sum': 'eq', 'object': faulty_king, 'result': 0})
 
 properties = []
-properties.append({'name':'validity0', 'initial':'(= x0 (- n f))', 'qf':'some', 'reachable':'(not (= x1 0))'})
-properties.append({'name':'validity1', 'initial':'(= x1 (- n f))', 'qf':'some', 'reachable':'(not (= x0 0))'})
-properties.append({'name':'agreement', 'initial':'true', 'qf':'last', 'reachable':'(and (not (= x0 0)) (not (= x1 0)))'})
+properties.append({'name':'validity0', 'spec':'safety', 'initial':'(= x0 (- n f))', 'qf':'some', 'reachable':'(not (= x1 0))'})
+properties.append({'name':'validity1', 'spec':'safety', 'initial':'(= x1 (- n f))', 'qf':'some', 'reachable':'(not (= x0 0))'})
+properties.append({'name':'agreement', 'spec':'safety', 'initial':'true', 'qf':'last', 'reachable':'(and (not (= x0 0)) (not (= x1 0)))'})
