@@ -13,7 +13,7 @@ There are three packages:
 <ul>
   <li><code>algorithms</code>, containing the algorithms for which we compute the diameter using SMT</li>
   <li><code>boundable</code>, containing the algorithms for which additionally we have a theoretical bound on the diameter</li>
-  <li><code>conuterexamples</code>, containing erroneus encodings of the algorithms</li>
+  <li><code>conuterexamples</code>, containing erroneous encodings of the algorithms</li>
 </ul>  
 
 <h3>Running the experiments</h3>
