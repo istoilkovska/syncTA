@@ -154,10 +154,3 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
 
     
     return str_result
-
-if __name__ == "__main__":
-    algorithm = sys.argv[1]
-    pkg = sys.argv[2]
-    solver = sys.argv[3]
-    diam = int(sys.argv[4])
-    print bounded_model_checking(algorithm, pkg, solver, diam)

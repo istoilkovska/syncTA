@@ -83,9 +83,3 @@ def compute_diameter(algorithm, pkg, solver, start, end):
         return -1
 
     return diam * phase
-
-if __name__ == "__main__":
-    algorithm = sys.argv[1]
-    pkg = sys.argv[2]
-    solver = sys.argv[3]
-    print compute_diameter(algorithm, pkg, solver, 0, 5)
