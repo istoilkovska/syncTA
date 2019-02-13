@@ -25,9 +25,9 @@ def print_table(results):
     header = ["algorithm".center(12), "|L|".center(5), 
               "|R|".center(5), "|Psi|".center(5), "RC".center(27),
               "d, z3".center(5), "d, cvc4".center(5), 
-              "t_d, z3".center(6), "t_d, cvc4".center(6), 
-              "t_b, z3".center(6), "t_b, cvc4".center(6),  
-              "", "c".center(5), "t_b, z3".center(6), "t_b, cvc4".center(6)]
+              "t_d, z3".center(8), "t_d, cvc4".center(8), 
+              "t_b, z3".center(8), "t_b, cvc4".center(8),  
+              "", "c".center(5), "t_b, z3".center(8), "t_b, cvc4".center(8)]
     hline = ['-' * len(h) for h in header]
     
     print ' + '.join(hline)
@@ -89,7 +89,7 @@ def compute_results():
             # compute diameter
             diam[solver] = compute_diameter(alg, "algorithms", solver, 0, 5)
             diam_time = time.time() - start
-            t_d[solver] = "%s%s" % (time.strftime("%S", time.gmtime(diam_time)), str(diam_time)[str(diam_time).index("."):4])
+            t_d[solver] = "%s%s" % (time.strftime("%M:%S", time.gmtime(diam_time)), str(diam_time)[str(diam_time).index("."):4])
 
             if diam[solver] != -1:
                 # if the diameter has been computed, print it and use it for bounded model checking
@@ -98,14 +98,14 @@ def compute_results():
                 # apply bounded model checking to check correctness of properties
                 bmc_result = bounded_model_checking(alg, "algorithms", solver, diam[solver])
                 bmc_time = time.time() - start
-                t_b[solver] = "%s%s" % (time.strftime("%S", time.gmtime(bmc_time)), str(bmc_time)[str(bmc_time).index("."):4])
+                t_b[solver] = "%s%s" % (time.strftime("%M:%S", time.gmtime(bmc_time)), str(bmc_time)[str(bmc_time).index("."):4])
 
                 if alg in boundable:
                     # apply bounded model checking with the theoretical bound for a class of algorithms
                     start = time.time()    
                     bmc_result = bounded_model_checking(alg, "algorithms", solver, Psi * c)
                     bmc_time = time.time() - start
-                    t_c[solver] = "%s%s" % (time.strftime("%S", time.gmtime(bmc_time)), str(bmc_time)[str(bmc_time).index("."):4])
+                    t_c[solver] = "%s%s" % (time.strftime("%M:%S", time.gmtime(bmc_time)), str(bmc_time)[str(bmc_time).index("."):4])
                 else:
                     t_c[solver] = '-'
 

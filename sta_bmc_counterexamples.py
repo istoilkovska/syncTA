@@ -24,8 +24,8 @@ def print_table(results):
     
     header = ["algorithm".center(15), "error injected".center(40),
               "d, z3".center(5), "d, cvc4".center(5), 
-              "t_d, z3".center(7), "t_d, cvc4".center(7), 
-              "t_b, z3".center(7), "t_b, cvc4".center(7)]
+              "t_d, z3".center(8), "t_d, cvc4".center(9), 
+              "t_b, z3".center(9), "t_b, cvc4".center(9)]
     hline = ['-' * len(h) for h in header]
     
     print ' + '.join(hline)
@@ -80,7 +80,7 @@ def compute_results():
             # compute the diameter
             diam[solver] = compute_diameter(alg, "counterexamples", solver, 0, 5)
             diam_time = time.time() - start
-            t_d[solver] = "%s%s" % (time.strftime("%S", time.gmtime(diam_time)), str(diam_time)[str(diam_time).index("."):4])
+            t_d[solver] = "%s%s" % (time.strftime("%M:%S", time.gmtime(diam_time)), str(diam_time)[str(diam_time).index("."):4])
 
             if diam[solver] != -1:
                 # if the diameter has been computed, print it and use it for bounded model checking
@@ -89,7 +89,7 @@ def compute_results():
                 # apply bounded model checking. Some properties should be violated
                 bmc_result = bounded_model_checking(alg, "counterexamples", solver, diam[solver])
                 bmc_time = time.time() - start
-                t_b[solver] = "%s%s" % (time.strftime("%S", time.gmtime(bmc_time)), str(bmc_time)[str(bmc_time).index("."):4])
+                t_b[solver] = "%s%s" % (time.strftime("%M:%S", time.gmtime(bmc_time)), str(bmc_time)[str(bmc_time).index("."):4])
 
                 print bmc_result      
                 
