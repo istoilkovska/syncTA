@@ -1,4 +1,5 @@
 import os
+import sys
 import subprocess
 import helper
 import importlib
@@ -13,7 +14,10 @@ path = helper.path
 clean_round = helper.clean_round
 
 def bounded_model_checking(algorithm, pkg, solver, diam):    
-
+    """
+    Applies bounded model checking given a diameter
+    """
+	
     alg = importlib.import_module("." + algorithm, package=pkg)
 
     local = alg.local
@@ -45,17 +49,21 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
     for p in properties:
         result[p['name']] = []
 
+	# check whether a clean round has to be imposed
     if round_constraint == []: 
+		# if not, check paths with (length) many transitions
         for length in range(phase, maxlength + 1, phase):
             
             smt_file = open(file_name, "w")
-            
+            # create a path, with (length) many transitions
             smt_path = path(0, length, local, rules, "c", "t", constraints, L)
+	    	# impose initial conditions
             smt_path += assertion(initial_condition(initial, "c", constraints)) 
         
             smt_file.write(intro)    
             smt_file.write(smt_path)
-
+						
+			# add assertions for each property
             for p in properties:
                 s = ""
                 s += assertion(property_check(0, length, phase, "c", p, L)) + "\n"
@@ -64,6 +72,7 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
             
             smt_file.close()
 
+			# check the properties using cvc4 or z3
             if solver == "cvc4":
                 smt = subprocess.Popen(["cvc4", "--lang", "smt2", "--incremental", file_name], stdout=subprocess.PIPE)
             elif solver == "z3":
@@ -84,23 +93,27 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
             
 
     else:
+		# if a clean round has to be imposed, check paths with at most (2 * length) transitions
         for length1 in range(phase, maxlength  + 1, phase):
             for length2 in range(phase, maxlength  + 1, phase):
-                total = length1 + length2 + phase
+                # total = length1 + length2 + phase
+                total = length1 + length2
 
                 smt_file = open(file_name, "w")
             
-
-                smt_path = path(0, length1, local, rules, "c", "t", constraints, L)
+				# create a path with (length1 + length2) transitions
+                smt_path = path(0, total, local, rules, "c", "t", constraints, L)
                 smt_path += assertion(initial_condition(initial, "c", constraints)) 
         
                 smt_file.write(intro)    
-
-                smt_path += path(length1 + phase, total, local, rules, "c", "t", constraints, L)
-                smt_path += clean_round(length1, local, rules, "c", "t", constraints, L, round_constraint, phase) + "\n"
                 
+                # impose clean round constraint
+                smt_path += clean_round(length1 - phase, local, rules, "c", "t", constraints, L, round_constraint, phase) + "\n"
+                
+
                 smt_file.write(smt_path)
 
+				# add assertions for each property
                 for p in properties:
                     s = ""
                     s += assertion(property_check(0, total, phase, "c", p, L)) + "\n"
@@ -109,6 +122,7 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
                 
                 smt_file.close()
 
+				# check the properties using cvc4 or z3
                 if solver == "cvc4":
                     smt = subprocess.Popen(["cvc4", "--lang", "smt2", "--incremental", file_name], stdout=subprocess.PIPE)
                 elif solver == "z3":
@@ -140,3 +154,10 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
 
     
     return str_result
+
+if __name__ == "__main__":
+    algorithm = sys.argv[1]
+    pkg = sys.argv[2]
+    solver = sys.argv[3]
+    diam = int(sys.argv[4])
+    print bounded_model_checking(algorithm, pkg, solver, diam)

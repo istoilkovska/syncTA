@@ -18,7 +18,7 @@ rules.append({'idx': 5, 'from': 3, 'to': 3, 'guard': "(< x0 1)"})
 # parameters, resilience condition
 params = ["n", "t", "f"]
 active = "n"
-rc = ["(> n 0)", "(>= t 0)", "(> n t)", "(>= t f)"]
+rc = ["(> n 0)", "(>= t 0)", "(>= t f)", "(> n t)"]
 
 # faults
 faults = "send omission"

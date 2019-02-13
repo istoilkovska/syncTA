@@ -28,7 +28,7 @@ rules.append({'idx': 15, 'from': 5, 'to': 7, 'guard': "(>= (+ x y) (- n t))"})
 # parameters, resilience condition
 params = ["n", "t", "f"]
 active = "n"
-rc = ["(> n 0)", "(>= t 0)", "(> n (* 2 t))", "(>= t f)"]
+rc = ["(> n 0)", "(>= t 0)", "(>= t f)", "(> n (* 2 t))"]
 
 # faults
 faults = "omission"
@@ -46,4 +46,3 @@ constraints.append({'type': 'transition', 'sum': 'eq', 'object': range(len(rules
 # properties
 properties = []
 properties.append({'name':"unforgeability", 'spec':'safety', 'initial':"(= (+ x y) 0)", 'qf':'some', 'reachable':"(> acc 0)"})
-# properties.append({'name':"correctness", 'spec':'liveness', 'initial':"(= (+ x y) n)", 'qf':'all', 'reachable':"(< acc n)"})

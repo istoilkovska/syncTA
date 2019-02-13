@@ -1,11 +1,11 @@
 import os
 import sys
 import bmc
-import chain
 import time
+import helper
 
 bounded_model_checking = bmc.bounded_model_checking
-compute_bound = chain.compute_bound
+compute_bound = helper.compute_bound
 
 alg_list = [alg[:-3] for alg in os.listdir("boundable") if alg[-3:] == ".py" and alg[0] != "_"]
 

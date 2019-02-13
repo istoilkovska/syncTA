@@ -1,4 +1,5 @@
 import os
+import sys
 import importlib
 import subprocess
 import helper
@@ -10,6 +11,9 @@ diameter_query = helper.diameter_query
 path = helper.path
 
 def compute_diameter(algorithm, pkg, solver, start, end):
+    """
+    Computes the diameter of a given algorithm
+    """
 
     alg = importlib.import_module("." + algorithm, package = pkg)
 
@@ -43,11 +47,15 @@ def compute_diameter(algorithm, pkg, solver, start, end):
 
         smt_file = open(file_name, "w")      
         
+		# declare a path of length diam * phase + phase 
         smt_path += path(0, length, local, rules, "c", "t", constraints, L)
 
         if phase > 1:
             smt_path += assertion(initial_condition(initial, "c", constraints))
 
+		# check if all configurations on a path of length diam * phase, 
+        # starting in the same initial configuration as the above path,
+        # are different than the last reachable state of the above path
         smt_formula = assertion(diameter_query(0, diam, phase, length, local, rules, "c", "d", "r", constraints, L))
 
         smt_file.write(intro)
@@ -56,18 +64,28 @@ def compute_diameter(algorithm, pkg, solver, start, end):
         smt_file.write("(check-sat)") 
         smt_file.close()
 
+		# use cvc4 or z3 to check for unsat
         if "cvc4" in solver:
-            smt = subprocess.Popen(["cvc4", "--lang", "smt2", "--incremental", file_name], stdout=subprocess.PIPE)
+            smt = subprocess.Popen(["cvc4", "--lang", "smt2", "--incremental", "--tlimit=60000", file_name], stdout=subprocess.PIPE)
         elif "z3" in solver:
-            smt = subprocess.Popen(["z3", "-smt2", file_name], stdout=subprocess.PIPE)
+            smt = subprocess.Popen(["z3", "-smt2", "-T:60", file_name], stdout=subprocess.PIPE)
         
         output = smt.communicate()[0]
         
         if output.strip() == "unsat":
             break
+        elif output.strip() == "unknown":
+            print("Timeout")
+            return -1
 
     if output.strip() == "sat":
         print("The diameter is not between " + str(start) + " and " + str(end))
         return -1
 
     return diam * phase
+
+if __name__ == "__main__":
+    algorithm = sys.argv[1]
+    pkg = sys.argv[2]
+    solver = sys.argv[3]
+    print compute_diameter(algorithm, pkg, solver, 0, 5)

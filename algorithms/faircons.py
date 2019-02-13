@@ -31,7 +31,7 @@ rules.append({'idx': 19, 'from': 10, 'to': 10, 'guard': "true"})
 # parameters, resilience condition
 params = ["n", "t", "f"]
 active = "n"
-rc = ["(> n 0)", "(>= t 0)", "(> n t)", "(>= t f)"]
+rc = ["(> n 0)", "(>= t 0)", "(>= t f)", "(> n t)"]
 
 # faults
 faults = "crash"

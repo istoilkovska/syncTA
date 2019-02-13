@@ -23,7 +23,7 @@ rules.append({'idx': 11, 'from': 5, 'to': 5, 'guard': "(< (+ x0 x1) 1)"})
 # parameters, resilience condition
 params = ["n", "t", "f"]
 active = "n"
-rc = ["(> n 0)", "(>= t 0)", "(> n t)", "(>= t f)"]
+rc = ["(> n 0)", "(>= t 0)", "(>= t f)", "(> n t)"]
 
 # faults
 faults = "send omission"
@@ -36,7 +36,7 @@ constraints = []
 constraints.append({'type': 'configuration', 'sum': 'eq', 'object': local, 'result': active})
 constraints.append({'type': 'configuration', 'sum': 'le', 'object': faulty, 'result': max_faulty})
 constraints.append({'type': 'transition', 'sum': 'eq', 'object': range(len(rules)), 'result': active})
-# SPECIAL ROUND CONSTRAINT OMITTED
+# CLEAN ROUND CONSTRAINT OMITTED
 
 properties = []
 properties.append({'name':'validity0', 'spec':'safety', 'initial':'(= v0 0)', 'qf':'last', 'reachable':'(> x0 0)'})

@@ -22,9 +22,14 @@ You can check the safety of the encoded algorithms by
 $ python run.py solver
 </code>
 
+You can check the safety of the algorithms for which we have a theoretical bound on the diameter by
+<code>
+$ python run_boundable.py solver
+</code>
+
 You can check that the erroneous versions contain counterexamples by 
 <code>
 $ python run_counterexamples.py solver
 </code>
 
-In both cases, <code>solver</code> is either <code>z3</code> or <code>cvc4</code>.
+In all cases, <code>solver</code> is either <code>z3</code> or <code>cvc4</code>.

@@ -72,7 +72,7 @@ rules.append({'idx': 41, 'from': 23, 'to': 19, 'guard': "true"})
 # parameters, resilience condition
 params = ["n", "t", "f"]
 active = "(- n (- f 1))"
-rc = ["(> n 0)", "(> t 0)", "(> f 0)", "(>= n (* 4 t))", "(>= t f)"]
+rc = ["(> n 0)", "(> t 0)", "(> f 0)", "(>= t f)", "(>= n (* 4 t))"]
 
 # faults
 faults = "byzantine"

@@ -51,7 +51,7 @@ for alg in alg_list:
     print(alg + " done!\n\n")
 
 output.close()
-print("Results found in output_counterexamples_" +solver + ".txt\n")
+print("Results found in output_counterexamples_" + solver + ".txt\n")
 
 
 
