@@ -111,6 +111,9 @@ def compute_results():
 
                 print bmc_result        
             else:
+                diam[solver] = '-'
+                t_d[solver] = '-'
+                t_b[solver] = '-'
                 print 'The diameter cannot be determined\n'
 
         # store the result as a row in the results table
