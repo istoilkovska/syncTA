@@ -66,9 +66,9 @@ def compute_diameter(algorithm, pkg, solver, start, end):
 
 		# use cvc4 or z3 to check for unsat
         if "cvc4" in solver:
-            smt = subprocess.Popen(["cvc4", "--lang", "smt2", "--incremental", "--tlimit=60000", file_name], stdout=subprocess.PIPE)
+            smt = subprocess.Popen(["cvc4", "--lang", "smt2", "--incremental", "--tlimit=300000", file_name], stdout=subprocess.PIPE)
         elif "z3" in solver:
-            smt = subprocess.Popen(["z3", "-smt2", "-T:60", file_name], stdout=subprocess.PIPE)
+            smt = subprocess.Popen(["z3", "-smt2", "-T:300", file_name], stdout=subprocess.PIPE)
         
         output = smt.communicate()[0]
         
