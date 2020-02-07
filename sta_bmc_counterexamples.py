@@ -28,19 +28,19 @@ def print_table(results):
               "t_b, z3".center(9), "t_b, cvc4".center(9)]
     hline = ['-' * len(h) for h in header]
     
-    print ' + '.join(hline)
-    print ' | '.join(header)
-    print ' + '.join(hline)
+    print(' + '.join(hline))
+    print(' | '.join(header))
+    print(' + '.join(hline))
 
     for alg in wrongRC:
         row = []
         row.append(alg.center(len(header[0])))
         for i in range(len(results[alg])):
             row.append(results[alg][i].center(len(header[i + 1])))
-        print ' | '.join(row)
-        print ' + '.join(hline)
+        print(' | '.join(row))
+        print(' + '.join(hline))
 
-    print ' + '.join(hline)
+    print(' + '.join(hline))
 
     for alg in alg_list:
         if alg not in wrongRC:
@@ -48,8 +48,8 @@ def print_table(results):
             row.append(alg.center(len(header[0])))
             for i in range(len(results[alg])):
                 row.append(results[alg][i].center(len(header[i + 1])))
-            print ' | '.join(row)
-            print ' + '.join(hline)
+            print(' | '.join(row))
+            print(' + '.join(hline))
     
 
 def compute_results():
@@ -84,20 +84,20 @@ def compute_results():
 
             if diam[solver] != -1:
                 # if the diameter has been computed, print it and use it for bounded model checking
-                print 'Diameter: ' + str(diam[solver])
+                print('Diameter: ' + str(diam[solver]))
                 start = time.time()
                 # apply bounded model checking. Some properties should be violated
                 bmc_result = bounded_model_checking(alg, "counterexamples", solver, diam[solver])
                 bmc_time = time.time() - start
                 t_b[solver] = "%s%s" % (time.strftime("%M:%S", time.gmtime(bmc_time)), str(bmc_time)[str(bmc_time).index("."):4])
 
-                print bmc_result      
+                print(bmc_result)
                 
             else:                
                 diam[solver] = '-'
                 t_d[solver] = '-'
                 t_b[solver] = '-'
-                print 'The diameter cannot be determined\n'  
+                print('The diameter cannot be determined\n')
         
         # store the result as a row in the results table
         result[alg] = [error, str(diam['z3']), str(diam['cvc4']), t_d['z3'], t_d['cvc4'], t_b['z3'], t_b['cvc4']]

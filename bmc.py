@@ -1,6 +1,5 @@
 import os
 import sys
-import subprocess
 import helper
 import importlib
 import math
@@ -12,13 +11,13 @@ initial_condition = helper.initial_condition
 property_check = helper.property_check
 path = helper.path
 clean_round = helper.clean_round
+call_solver_bmc = helper.call_solver_bmc
 
 def bounded_model_checking(algorithm, pkg, solver, diam):    
     """
     Applies bounded model checking given a diameter
     """
-	
-    alg = importlib.import_module("." + algorithm, package=pkg)
+    alg = importlib.import_module("." + algorithm, package = pkg)
 
     local = alg.local
     params = alg.params
@@ -45,10 +44,6 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
 
     maxlength = diam 
 
-    result = {}
-    for p in properties:
-        result[p['name']] = []
-
 	# check whether a clean round has to be imposed
     if round_constraint == []: 
 		# if not, check paths with (length) many transitions
@@ -73,24 +68,7 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
             smt_file.close()
 
 			# check the properties using cvc4 or z3
-            if solver == "cvc4":
-                smt = subprocess.Popen(["cvc4", "--lang", "smt2", "--incremental", file_name], stdout=subprocess.PIPE)
-            elif solver == "z3":
-                smt = subprocess.Popen(["z3", "-smt2", file_name], stdout=subprocess.PIPE)
-            
-            output = smt.communicate()[0]
-            results = output.split()
-    
-            if len(results) == len(properties):
-                for i in range(len(results)):
-                    if results[i] == "unsat" or results[i] == "sat":
-                        result['' + properties[i]["name"]].append(results[i])
-                    else:
-                        result['' + properties[i]["name"]].append('no result')
-            else:
-                print("SMT solver reported an error")
-                exit()
-            
+            result = call_solver_bmc(solver, file_name, properties)           
 
     else:
 		# if a clean round has to be imposed, check paths with at most (2 * length) transitions
@@ -123,23 +101,7 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
                 smt_file.close()
 
 				# check the properties using cvc4 or z3
-                if solver == "cvc4":
-                    smt = subprocess.Popen(["cvc4", "--lang", "smt2", "--incremental", file_name], stdout=subprocess.PIPE)
-                elif solver == "z3":
-                    smt = subprocess.Popen(["z3", "-smt2", file_name], stdout=subprocess.PIPE)
-    
-                output = smt.communicate()[0]
-                results = output.split()
-        
-                if len(results) == len(properties):
-                    for i in range(len(results)):
-                        if results[i] == "unsat" or results[i] == "sat":
-                            result['' + properties[i]["name"]].append(results[i])
-                        else:
-                            result['' + properties[i]["name"]].append('no result')
-                else:
-                    print("SMT solver reported an error")
-                    exit()
+                result = call_solver_bmc(solver, file_name, properties)
     
     str_result = ""
     for p in properties:
@@ -154,3 +116,13 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
 
     
     return str_result
+
+if __name__ == "__main__":
+    if len(sys.argv) < 5:
+        print('Usage: python diameter.py $algorithm $package $solver $diameter')
+        exit()
+    alg = str(sys.argv[1])
+    pkg = str(sys.argv[2])
+    solver = str(sys.argv[3])
+    diam = int(sys.argv[4])
+    print(bounded_model_checking(alg, pkg, solver, diam))     

@@ -9,6 +9,7 @@ assertion = helper.assertion
 initial_condition = helper.initial_condition
 diameter_query = helper.diameter_query
 path = helper.path
+call_solver_diameter = helper.call_solver_diameter
 
 def compute_diameter(algorithm, pkg, solver, start, end):
     """
@@ -34,7 +35,6 @@ def compute_diameter(algorithm, pkg, solver, start, end):
     file_name = os.path.join(subdir, algorithm + "_diam.smt")
 
     intro = introduction(params, rc, solver)    
-    output = "" 
 
     for diam in range(start, end): 
         if diam == 0:
@@ -65,21 +65,29 @@ def compute_diameter(algorithm, pkg, solver, start, end):
         smt_file.close()
 
 		# use cvc4 or z3 to check for unsat
-        if "cvc4" in solver:
-            smt = subprocess.Popen(["cvc4", "--lang", "smt2", "--incremental", "--tlimit=300000", file_name], stdout=subprocess.PIPE)
-        elif "z3" in solver:
-            smt = subprocess.Popen(["z3", "-smt2", "-T:300", file_name], stdout=subprocess.PIPE)
-        
-        output = smt.communicate()[0]
-        
-        if output.strip() == "unsat":
+        result = call_solver_diameter(solver, file_name)
+        if result == "unsat":
             break
-        elif output.strip() == "unknown":
+        elif result == "unknown":
             print("Timeout")
             return -1
 
-    if output.strip() == "sat":
+    if result == "sat":
         print("The diameter is not between " + str(start) + " and " + str(end))
         return -1
 
     return diam * phase
+
+if __name__ == "__main__":
+    if len(sys.argv) < 4:
+        print('Usage: python diameter.py $algorithm $package $solver')
+        exit()
+    alg = str(sys.argv[1])
+    pkg = str(sys.argv[2])
+    solver = str(sys.argv[3])
+    print('Computing diameter for ' + alg + ' using ' + solver + '...')
+    diam = compute_diameter(alg, pkg, solver, 0, 6)
+    if diam != -1:
+        print('Diameter: ' + str(diam))
+    else:
+        print('The diameter cannot be computed.')

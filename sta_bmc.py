@@ -30,19 +30,19 @@ def print_table(results):
               "", "c".center(5), "t_b, z3".center(8), "t_b, cvc4".center(8)]
     hline = ['-' * len(h) for h in header]
     
-    print ' + '.join(hline)
-    print ' | '.join(header)
-    print ' + '.join(hline)
+    print(' + '.join(hline))
+    print(' | '.join(header))
+    print(' + '.join(hline))
 
     for alg in boundable:
         row = []
         row.append(alg.center(len(header[0])))
         for i in range(len(results[alg])):
             row.append(results[alg][i].center(len(header[i + 1])))
-        print ' | '.join(row)
-        print ' + '.join(hline)
+        print(' | '.join(row))
+        print(' + '.join(hline))
 
-    print ' + '.join(hline)
+    print(' + '.join(hline))
 
     for alg in alg_list:
         if alg not in boundable:
@@ -50,8 +50,8 @@ def print_table(results):
             row.append(alg.center(len(header[0])))
             for i in range(len(results[alg])):
                 row.append(results[alg][i].center(len(header[i + 1])))
-            print ' | '.join(row)
-            print ' + '.join(hline)
+            print(' | '.join(row))
+            print(' + '.join(hline))
     
 def compute_results():
     """
@@ -66,7 +66,7 @@ def compute_results():
     for alg in alg_list:
         # some statistics about the algorithm: number of local states, number or rules
         stats = helper.get_stats(alg, "algorithms")
-        # resilitence condition of the algorithm
+        # resilience condition of the algorithm
         RC = helper.getRC(alg, "algorithms")
         # time to compute the diameter
         t_d = {}
@@ -93,7 +93,7 @@ def compute_results():
 
             if diam[solver] != -1:
                 # if the diameter has been computed, print it and use it for bounded model checking
-                print 'Diameter: ' + str(diam[solver])
+                print('Diameter: ' + str(diam[solver]))
                 start = time.time()
                 # apply bounded model checking to check correctness of properties
                 bmc_result = bounded_model_checking(alg, "algorithms", solver, diam[solver])
@@ -109,12 +109,12 @@ def compute_results():
                 else:
                     t_c[solver] = '-'
 
-                print bmc_result        
+                print(bmc_result)
             else:
                 diam[solver] = '-'
                 t_d[solver] = '-'
                 t_b[solver] = '-'
-                print 'The diameter cannot be determined\n'
+                print('The diameter cannot be determined\n')
 
         # store the result as a row in the results table
         result[alg] = [str(stats['L']), str(stats['R']), str(stats['Psi']), RC, str(diam['z3']), str(diam['cvc4']), t_d['z3'], t_d['cvc4'], t_b['z3'], t_b['cvc4'], "", str(c), t_c['z3'], t_c['cvc4']]

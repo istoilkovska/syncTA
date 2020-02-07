@@ -1,4 +1,5 @@
 import importlib
+import subprocess
 
 def new_constant(const_name):
     """
@@ -456,3 +457,51 @@ def getRC(algorithm, pkg):
     RC = alg.rc[-1]
     
     return RC
+
+def call_solver_diameter(solver, file_name):
+    if "cvc4" in solver:
+        smt = subprocess.Popen(["cvc4", "--lang", "smt2", "--incremental", "--tlimit=300000", file_name], stdout=subprocess.PIPE, text=True)
+    elif "z3" in solver:
+        smt = subprocess.Popen(["z3", "-smt2", "-T:300", file_name], stdout=subprocess.PIPE, text=True)
+
+    try: 
+        output, _ = smt.communicate(timeout=300)
+    except:
+        smt.kill()
+        print("Timeout")
+        exit()
+
+    return output.strip()
+    
+
+
+def call_solver_bmc(solver, file_name, properties):
+    result = {}
+    for p in properties:
+        result[p['name']] = []
+
+    if solver == "cvc4":
+        smt = subprocess.Popen(["cvc4", "--lang", "smt2", "--incremental", file_name], stdout=subprocess.PIPE, text=True)
+    elif solver == "z3":
+        smt = subprocess.Popen(["z3", "-smt2", file_name], stdout=subprocess.PIPE, text=True)
+    
+    try: 
+        output, _ = smt.communicate(timeout=300)
+    except:
+        smt.kill()
+        print("Timeout")
+        exit()
+    
+    results = output.strip().split()
+
+    if len(results) == len(properties):
+        for i in range(len(results)):
+            if results[i] == "unsat" or results[i] == "sat":
+                result['' + properties[i]["name"]].append(results[i])
+            else:
+                result['' + properties[i]["name"]].append('no result')
+    else:
+        print("SMT solver reported an error")
+        exit()
+
+    return result

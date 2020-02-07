@@ -9,7 +9,7 @@ initial = [0, 1]
 rules = []
 rules.append({'idx': 0, 'from': 0, 'to': 0, 'guard': "(< x (+ t 1))"})
 rules.append({'idx': 1, 'from': 0, 'to': 2, 'guard': "(>= (+ x f) (+ t 1))"})
-rules.append({'idx': 2, 'from': 1, 'to': 2, 'guard': "true"})
+rules.append({'idx': 2, 'from': 1, 'to': 2, 'guard': "(< x (- n t))"})
 rules.append({'idx': 3, 'from': 2, 'to': 2, 'guard': "(< x (- n t))"})
 rules.append({'idx': 4, 'from': 2, 'to': 3, 'guard': "(>= (+ x f) (- n t))"})
 rules.append({'idx': 5, 'from': 3, 'to': 3, 'guard': "true"})
