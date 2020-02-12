@@ -2,28 +2,28 @@
 local = range(42)
 # L states
 L = {"x0" : [0, 12], "x1" : [1, 13], "q0" : [14], "q1" : [15], "qb" : [20],
-     "y0" : [24, 36], "y1" : [13, 37], "qo0" : [38], "qo1" : [39]
+     "y0" : [24, 36], "y1" : [25, 37], "qo0" : [38], "qo1" : [39]
     }
 initial = [0, 1, 12, 13, 18, 19, 24, 25, 36, 37]
 
  
-# v0 : (<= (+ x1 y1) (+ (+ x0 y0) fb))
-# v1 : (> (+ x1 y1) (- (+ x0 y0) fb))
-# c0 : (<= (+ x0 y0) (+ (+ x1 y1 (* 2 tb) to) fb))
-# ~c0 : (> (+ x0 y0) (- (+ x1 y1 (* 2 tb) to) fb))
-# c1 : (<= (+ x1 y1) (+ (+ x0 y0 (* 2 tb) to) fb))
-# ~c1 : (> (+ x1 y1) (- (+ x0 y0 (* 2 tb) to) fb))  
+# v0 : (<= x1 (+ x0 y0 fb))
+# v1 : (> (+ x1 y1) (- x0 fb))
+# c0 : (<= x0 (+ x1 y1 (* 2 tb) to fb))
+# ~c0 : (> (+ x0 y0) (- (+ x1 (* 2 tb) to) fb))
+# c1 : (<= x1 (+ x0 y0 (* 2 tb) to fb))
+# ~c1 : (> (+ x1 y1) (- (+ x0 (* 2 tb) to) fb))
 
 rules = []
-rules.append({'idx': 0, 'from': 0, 'to': 2, 'guard': "(and (<= (+ x1 y1) (+ (+ x0 y0) fb)) (<= (+ x0 y0) (+ (+ x1 y1 (* 2 tb) to) fb)))"})
-rules.append({'idx': 1, 'from': 0, 'to': 3, 'guard': "(and (<= (+ x1 y1) (+ (+ x0 y0) fb)) (> (+ x0 y0) (- (+ x1 y1 (* 2 tb) to) fb)))"})
-rules.append({'idx': 2, 'from': 0, 'to': 4, 'guard': "(and (> (+ x1 y1) (- (+ x0 y0) fb)) (<= (+ x1 y1) (+ (+ x0 y0 (* 2 tb) to) fb)))"})
-rules.append({'idx': 3, 'from': 0, 'to': 5, 'guard': "(and (> (+ x1 y1) (- (+ x0 y0) fb)) (> (+ x1 y1) (- (+ x0 y0 (* 2 tb) to) fb))  )"})
+rules.append({'idx': 0, 'from': 0, 'to': 2, 'guard': "(and (<= x1 (+ x0 y0 fb)) (<= x0 (+ x1 y1 (* 2 tb) to fb)) )"})
+rules.append({'idx': 1, 'from': 0, 'to': 3, 'guard': "(and (<= x1 (+ x0 y0 fb)) (> (+ x0 y0) (- (+ x1 (* 2 tb) to) fb)) )"})
+rules.append({'idx': 2, 'from': 0, 'to': 4, 'guard': "(and (> (+ x1 y1) (- x0 fb)) (<= x1 (+ x0 y0 (* 2 tb) to fb)) )"})
+rules.append({'idx': 3, 'from': 0, 'to': 5, 'guard': "(and (> (+ x1 y1) (- x0 fb)) (> (+ x1 y1) (- (+ x0 (* 2 tb) to) fb)) )"})
 
-rules.append({'idx': 4, 'from': 1, 'to': 2, 'guard': "(and (<= (+ x1 y1) (+ (+ x0 y0) fb)) (<= (+ x0 y0) (+ (+ x1 y1 (* 2 tb) to) fb)))"})
-rules.append({'idx': 5, 'from': 1, 'to': 3, 'guard': "(and (<= (+ x1 y1) (+ (+ x0 y0) fb)) (> (+ x0 y0) (- (+ x1 y1 (* 2 tb) to) fb)))"})
-rules.append({'idx': 6, 'from': 1, 'to': 4, 'guard': "(and (> (+ x1 y1) (- (+ x0 y0) fb)) (<= (+ x1 y1) (+ (+ x0 y0 (* 2 tb) to) fb)))"})
-rules.append({'idx': 7, 'from': 1, 'to': 5, 'guard': "(and (> (+ x1 y1) (- (+ x0 y0) fb)) (> (+ x1 y1) (- (+ x0 y0 (* 2 tb) to) fb))  )"})
+rules.append({'idx': 4, 'from': 1, 'to': 2, 'guard': "(and (<= x1 (+ x0 y0 fb)) (<= x0 (+ x1 y1 (* 2 tb) to fb)) )"})
+rules.append({'idx': 5, 'from': 1, 'to': 3, 'guard': "(and (<= x1 (+ x0 y0 fb)) (> (+ x0 y0) (- (+ x1 (* 2 tb) to) fb)) )"})
+rules.append({'idx': 6, 'from': 1, 'to': 4, 'guard': "(and (> (+ x1 y1) (- x0 fb)) (<= x1 (+ x0 y0 (* 2 tb) to fb)) )"})
+rules.append({'idx': 7, 'from': 1, 'to': 5, 'guard': "(and (> (+ x1 y1) (- x0 fb)) (> (+ x1 y1) (- (+ x0 (* 2 tb) to) fb)) )"})
 
 rules.append({'idx': 8, 'from': 2, 'to': 6, 'guard': "(> (+ q0 qb qo0) 0)"})
 rules.append({'idx': 9, 'from': 2, 'to': 7, 'guard': "(> (+ q1 qb qo1) 0)"})
@@ -54,11 +54,11 @@ rules.append({'idx': 25, 'from': 11, 'to': 13, 'guard': "true"})
 
 
 # queen transitions
-rules.append({'idx': 26, 'from': 12, 'to': 14, 'guard': "(<= (+ x1 y1) (+ (+ x0 y0) fb))"})
-rules.append({'idx': 27, 'from': 12, 'to': 15, 'guard': "(> (+ x1 y1) (- (+ x0 y0) fb))"})
+rules.append({'idx': 26, 'from': 12, 'to': 14, 'guard': "(<= x1 (+ x0 y0 fb))"})
+rules.append({'idx': 27, 'from': 12, 'to': 15, 'guard': "(> (+ x1 y1) (- x0 fb))"})
 
-rules.append({'idx': 28, 'from': 13, 'to': 14, 'guard': "(<= (+ x1 y1) (+ (+ x0 y0) fb))"})
-rules.append({'idx': 29, 'from': 13, 'to': 15, 'guard': "(> (+ x1 y1) (- (+ x0 y0) fb))"})
+rules.append({'idx': 28, 'from': 13, 'to': 14, 'guard': "(<= x1 (+ x0 y0 fb))"})
+rules.append({'idx': 29, 'from': 13, 'to': 15, 'guard': "(> (+ x1 y1) (- x0 fb))"})
 
 rules.append({'idx': 30, 'from': 14, 'to': 16, 'guard': "true"})
 rules.append({'idx': 31, 'from': 15, 'to': 17, 'guard': "true"})
@@ -79,15 +79,15 @@ rules.append({'idx': 40, 'from': 23, 'to': 18, 'guard': "true"})
 rules.append({'idx': 41, 'from': 23, 'to': 19, 'guard': "true"})
 
 # omission faulty processes transitions
-rules.append({'idx': 42, 'from': 24, 'to': 26, 'guard': "(and (<= (+ x1 y1) (+ (+ x0 y0) fb)) (<= (+ x0 y0) (+ (+ x1 y1 (* 2 tb) to) fb)))"})
-rules.append({'idx': 43, 'from': 24, 'to': 27, 'guard': "(and (<= (+ x1 y1) (+ (+ x0 y0) fb)) (> (+ x0 y0) (- (+ x1 y1 (* 2 tb) to) fb)))"})
-rules.append({'idx': 44, 'from': 24, 'to': 28, 'guard': "(and (> (+ x1 y1) (- (+ x0 y0) fb)) (<= (+ x1 y1) (+ (+ x0 y0 (* 2 tb) to) fb)))"})
-rules.append({'idx': 45, 'from': 24, 'to': 29, 'guard': "(and (> (+ x1 y1) (- (+ x0 y0) fb)) (> (+ x1 y1) (- (+ x0 y0 (* 2 tb) to) fb))  )"})
+rules.append({'idx': 42, 'from': 24, 'to': 26, 'guard': "(and (<= x1 (+ x0 y0 fb)) (<= x0 (+ x1 y1 (* 2 tb) to fb)) )"})
+rules.append({'idx': 43, 'from': 24, 'to': 27, 'guard': "(and (<= x1 (+ x0 y0 fb)) (> (+ x0 y0) (- (+ x1 (* 2 tb) to) fb)) )"})
+rules.append({'idx': 44, 'from': 24, 'to': 28, 'guard': "(and (> (+ x1 y1) (- x0 fb)) (<= x1 (+ x0 y0 (* 2 tb) to fb)) )"})
+rules.append({'idx': 45, 'from': 24, 'to': 29, 'guard': "(and (> (+ x1 y1) (- x0 fb)) (> (+ x1 y1) (- (+ x0 (* 2 tb) to) fb)) )"})
 
-rules.append({'idx': 46, 'from': 25, 'to': 26, 'guard': "(and (<= (+ x1 y1) (+ (+ x0 y0) fb)) (<= (+ x0 y0) (+ (+ x1 y1 (* 2 tb) to) fb)))"})
-rules.append({'idx': 47, 'from': 25, 'to': 27, 'guard': "(and (<= (+ x1 y1) (+ (+ x0 y0) fb)) (> (+ x0 y0) (- (+ x1 y1 (* 2 tb) to) fb)))"})
-rules.append({'idx': 48, 'from': 25, 'to': 28, 'guard': "(and (> (+ x1 y1) (- (+ x0 y0) fb)) (<= (+ x1 y1) (+ (+ x0 y0 (* 2 tb) to) fb)))"})
-rules.append({'idx': 49, 'from': 25, 'to': 29, 'guard': "(and (> (+ x1 y1) (- (+ x0 y0) fb)) (> (+ x1 y1) (- (+ x0 y0 (* 2 tb) to) fb))  )"})
+rules.append({'idx': 46, 'from': 25, 'to': 26, 'guard': "(and (<= x1 (+ x0 y0 fb)) (<= x0 (+ x1 y1 (* 2 tb) to fb)) )"})
+rules.append({'idx': 47, 'from': 25, 'to': 27, 'guard': "(and (<= x1 (+ x0 y0 fb)) (> (+ x0 y0) (- (+ x1 (* 2 tb) to) fb)) )"})
+rules.append({'idx': 48, 'from': 25, 'to': 28, 'guard': "(and (> (+ x1 y1) (- x0 fb)) (<= x1 (+ x0 y0 (* 2 tb) to fb)) )"})
+rules.append({'idx': 49, 'from': 25, 'to': 29, 'guard': "(and (> (+ x1 y1) (- x0 fb)) (> (+ x1 y1) (- (+ x0 (* 2 tb) to) fb)) )"})
 
 rules.append({'idx': 50, 'from': 26, 'to': 30, 'guard': "(> (+ q0 qb qo0) 0)"})
 rules.append({'idx': 51, 'from': 26, 'to': 31, 'guard': "(> (+ q1 qb qo1) 0)"})
@@ -118,11 +118,11 @@ rules.append({'idx': 67, 'from': 35, 'to': 37, 'guard': "true"})
 
 
 # omission faulty queen transitions
-rules.append({'idx': 68, 'from': 36, 'to': 38, 'guard': "(<= (+ x1 y1) (+ (+ x0 y0) fb))"})
-rules.append({'idx': 69, 'from': 36, 'to': 39, 'guard': "(> (+ x1 y1) (- (+ x0 y0) fb))"})
+rules.append({'idx': 68, 'from': 36, 'to': 38, 'guard': "(<= x1 (+ x0 y0 fb))"})
+rules.append({'idx': 69, 'from': 36, 'to': 39, 'guard': "(> (+ x1 y1) (- x0 fb))"})
 
-rules.append({'idx': 70, 'from': 37, 'to': 38, 'guard': "(<= (+ x1 y1) (+ (+ x0 y0) fb))"})
-rules.append({'idx': 71, 'from': 37, 'to': 39, 'guard': "(> (+ x1 y1) (- (+ x0 y0) fb))"})
+rules.append({'idx': 70, 'from': 37, 'to': 38, 'guard': "(<= x1 (+ x0 y0 fb))"})
+rules.append({'idx': 71, 'from': 37, 'to': 39, 'guard': "(> (+ x1 y1) (- x0 fb))"})
 
 rules.append({'idx': 72, 'from': 38, 'to': 40, 'guard': "true"})
 rules.append({'idx': 73, 'from': 39, 'to': 41, 'guard': "true"})
@@ -130,6 +130,13 @@ rules.append({'idx': 73, 'from': 39, 'to': 41, 'guard': "true"})
 # going back to the beginning of the round
 rules.append({'idx': 74, 'from': 40, 'to': 24, 'guard': "true"})
 rules.append({'idx': 75, 'from': 41, 'to': 25, 'guard': "true"})
+
+# additional rules that introduce non-determinism when the queen is send-omission faulty
+rules.append({'idx': 76, 'from': 2, 'to': 6, 'guard': "(> (+ qo0 qo1) 0)"})
+rules.append({'idx': 77, 'from': 4, 'to': 9, 'guard': "(> (+ qo0 qo1) 0)"})
+
+rules.append({'idx': 78, 'from': 26, 'to': 30 'guard': "(> (+ qo0 qo1) 0)"})
+rules.append({'idx': 79, 'from': 28, 'to': 33, 'guard': "(> (+ qo0 qo1) 0)"})
 
 # parameters, resilience condition
 params = ["n", "tb", "to", "fb", "fo"]
@@ -143,8 +150,8 @@ max_byzantine = "1"
 omission = list(range(24, 42))
 max_omission = "fo"
 
-queen = list(range(12, 19)) + [20, 22] + list(range(36, 42))
-faulty_queen = [18, 20, 22]
+queen = list(range(12, 18)) + [18, 20, 22] + list(range(36, 42))
+faulty_queen = [18, 20, 22] + list(range(36, 42))
 phase = 3
 
 # configuration/transition constraints
