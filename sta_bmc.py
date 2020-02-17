@@ -9,7 +9,7 @@ compute_diameter = diameter.compute_diameter
 bounded_model_checking = bmc.bounded_model_checking
 
 # get list of algorithms
-alg_list = [alg[:-3] for alg in os.listdir("algorithms") if alg[-3:] == ".py" and alg[0] != "_"]
+alg_list = [alg[:-3] for alg in os.listdir("new") if alg[-3:] == ".py" and alg[0] != "_"]
 alg_list.sort()
 boundable = [alg for alg in alg_list if alg.startswith('rb')]
 
@@ -22,12 +22,12 @@ def print_table(results):
     comparable to Table 2 on page 14 in the paper
     """
     
-    header = ["algorithm".center(12), "|L|".center(5), 
+    header = ["algorithm".center(21), "|L|".center(5), 
               "|R|".center(5), "|Psi|".center(5), "RC".center(27),
               "d, z3".center(5), "d, cvc4".center(5), 
-              "t_d, z3".center(8), "t_d, cvc4".center(8), 
-              "t_b, z3".center(8), "t_b, cvc4".center(8),  
-              "", "c".center(5), "t_b, z3".center(8), "t_b, cvc4".center(8)]
+              "t_d, z3".center(11), "t_d, cvc4".center(11), 
+              "t_b, z3".center(11), "t_b, cvc4".center(11),  
+              "", "c".center(5), "t_b, z3".center(11), "t_b, cvc4".center(11)]
     hline = ['-' * len(h) for h in header]
     
     print(' + '.join(hline))
@@ -87,34 +87,48 @@ def compute_results():
 
             start = time.time()
             # compute diameter
-            diam[solver] = compute_diameter(alg, "algorithms", solver, 0, 5)
+            error, output = compute_diameter(alg, "algorithms", solver, 0, 5)
             diam_time = time.time() - start
-            t_d[solver] = "%s%s" % (time.strftime("%M:%S", time.gmtime(diam_time)), str(diam_time)[str(diam_time).index("."):4])
+            
+            if error == -1:
+                diam[solver] = output
+                t_d[solver] = '-'
+                t_b[solver] = '-'
+            else:
+                diam[solver] = output
+                t_d[solver] = "{}{}".format(time.strftime("%H:%M:%S", time.gmtime(diam_time)), str(diam_time)[str(diam_time).index("."):4])
 
-            if diam[solver] != -1:
                 # if the diameter has been computed, print it and use it for bounded model checking
                 print('Diameter: ' + str(diam[solver]))
                 start = time.time()
                 # apply bounded model checking to check correctness of properties
-                bmc_result = bounded_model_checking(alg, "algorithms", solver, diam[solver])
-                bmc_time = time.time() - start
-                t_b[solver] = "%s%s" % (time.strftime("%M:%S", time.gmtime(bmc_time)), str(bmc_time)[str(bmc_time).index("."):4])
+                error, bmc_result = bounded_model_checking(alg, "algorithms", solver, diam[solver])
 
-                if alg in boundable:
-                    # apply bounded model checking with the theoretical bound for a class of algorithms
-                    start = time.time()    
-                    bmc_result = bounded_model_checking(alg, "algorithms", solver, Psi * c)
+                if error != -1:
                     bmc_time = time.time() - start
-                    t_c[solver] = "%s%s" % (time.strftime("%M:%S", time.gmtime(bmc_time)), str(bmc_time)[str(bmc_time).index("."):4])
+                    t_b[solver] = "{}{}".format(time.strftime("%H:%M:%S", time.gmtime(bmc_time)), str(bmc_time)[str(bmc_time).index("."):4])
+                else:
+                    t_b[solver] = '-'
+                
+                print(bmc_result)
+
+            if alg in boundable:
+                # apply bounded model checking with the theoretical bound for a class of algorithms
+                start = time.time()    
+                error, bmc_result = bounded_model_checking(alg, "algorithms", solver, Psi * c)
+                if bmc_result != -1:
+                    bmc_time = time.time() - start
+                    t_c[solver] = "{}{}".format(time.strftime("%H:%M:%S", time.gmtime(bmc_time)), str(bmc_time)[str(bmc_time).index("."):4])
                 else:
                     t_c[solver] = '-'
-
-                print(bmc_result)
             else:
-                diam[solver] = '-'
-                t_d[solver] = '-'
-                t_b[solver] = '-'
-                print('The diameter cannot be determined\n')
+                t_c[solver] = '-'
+
+            # else:
+            #     diam[solver] = '-'
+            #     t_d[solver] = '-'
+            #     t_b[solver] = '-'
+            #     print('The diameter cannot be determined\n')
 
         # store the result as a row in the results table
         result[alg] = [str(stats['L']), str(stats['R']), str(stats['Psi']), RC, str(diam['z3']), str(diam['cvc4']), t_d['z3'], t_d['cvc4'], t_b['z3'], t_b['cvc4'], "", str(c), t_c['z3'], t_c['cvc4']]

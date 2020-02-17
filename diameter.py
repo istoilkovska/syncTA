@@ -9,14 +9,14 @@ assertion = helper.assertion
 initial_condition = helper.initial_condition
 diameter_query = helper.diameter_query
 path = helper.path
-call_solver_diameter = helper.call_solver_diameter
+call_solver = helper.call_solver
 
 def compute_diameter(algorithm, pkg, solver, start, end):
     """
     Computes the diameter of a given algorithm
     """
-
-    alg = importlib.import_module("." + algorithm, package = pkg)
+    importlib.invalidate_caches()
+    alg = importlib.import_module('.' + algorithm, package = pkg)
 
     local = alg.local
     params = alg.params
@@ -27,6 +27,7 @@ def compute_diameter(algorithm, pkg, solver, start, end):
     constraints = alg.constraints
     phase = alg.phase
 
+    timeout = 21600
     
     file_dir = os.path.dirname(os.path.realpath('__file__'))
     subdir = os.path.join(file_dir, "smt", "diameter")
@@ -35,6 +36,9 @@ def compute_diameter(algorithm, pkg, solver, start, end):
     file_name = os.path.join(subdir, algorithm + "_diam.smt")
 
     intro = introduction(params, rc, solver)    
+
+    error = 0
+    solver_output = ""
 
     for diam in range(start, end): 
         if diam == 0:
@@ -65,18 +69,18 @@ def compute_diameter(algorithm, pkg, solver, start, end):
         smt_file.close()
 
 		# use cvc4 or z3 to check for unsat
-        result = call_solver_diameter(solver, file_name)
-        if result == "unsat":
-            break
-        elif result == "unknown":
-            print("Timeout")
-            return -1
-
-    if result == "sat":
+        error, solver_output = call_solver(solver, file_name, timeout)
+        if error != -1: 
+            if solver_output == "unsat":
+                break
+        else:
+            return -1, solver_output
+        
+    if error == -1 or solver_output == "sat":
         print("The diameter is not between " + str(start) + " and " + str(end))
-        return -1
+        return -1, "unknown"
 
-    return diam * phase
+    return 0, diam * phase
 
 if __name__ == "__main__":
     if len(sys.argv) < 4:
@@ -86,8 +90,8 @@ if __name__ == "__main__":
     pkg = str(sys.argv[2])
     solver = str(sys.argv[3])
     print('Computing diameter for ' + alg + ' using ' + solver + '...')
-    diam = compute_diameter(alg, pkg, solver, 0, 6)
-    if diam != -1:
+    error, diam = compute_diameter(alg, pkg, solver, 0, 6)
+    if error != -1:
         print('Diameter: ' + str(diam))
     else:
         print('The diameter cannot be computed.')

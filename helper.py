@@ -366,7 +366,7 @@ def compute_atomic(guards):
     for g in guards:
         a = []
         if str(g).startswith('(and ') or str(g).startswith('(not '):
-            a = compute_sub(g[4:-1])            
+            a = compute_sub(g[5:-1])            
         elif str(g).startswith('(or '):
             a = compute_sub(g[4:-1])
         else:
@@ -458,50 +458,24 @@ def getRC(algorithm, pkg):
     
     return RC
 
-def call_solver_diameter(solver, file_name):
-    if "cvc4" in solver:
-        smt = subprocess.Popen(["cvc4", "--lang", "smt2", "--incremental", "--tlimit=300000", file_name], stdout=subprocess.PIPE, text=True)
-    elif "z3" in solver:
-        smt = subprocess.Popen(["z3", "-smt2", "-T:300", file_name], stdout=subprocess.PIPE, text=True)
-
-    try: 
-        output, _ = smt.communicate(timeout=300)
-    except:
-        smt.kill()
-        print("Timeout")
-        exit()
-
-    return output.strip()
-    
-
-
-def call_solver_bmc(solver, file_name, properties):
-    result = {}
-    for p in properties:
-        result[p['name']] = []
-
+def call_solver(solver, file_name, timeout):
+    cvc4_timeout = timeout * 1000
     if solver == "cvc4":
-        smt = subprocess.Popen(["cvc4", "--lang", "smt2", "--incremental", file_name], stdout=subprocess.PIPE, text=True)
+        smt = subprocess.Popen(["cvc4", "--lang", "smt2", "--incremental", "--tlimit={}".format(str(cvc4_timeout)), file_name], stdout=subprocess.PIPE)
     elif solver == "z3":
-        smt = subprocess.Popen(["z3", "-smt2", file_name], stdout=subprocess.PIPE, text=True)
+        smt = subprocess.Popen(["z3", "-smt2", "-T:{}".format(timeout), file_name], stdout=subprocess.PIPE)
     
     try: 
-        output, _ = smt.communicate(timeout=300)
+        output = smt.communicate()[0]
     except:
         smt.kill()
-        print("Timeout")
-        exit()
-    
-    results = output.strip().split()
+        print("Couldn't get output from the SMT solver")
+        return -1, "error"
 
-    if len(results) == len(properties):
-        for i in range(len(results)):
-            if results[i] == "unsat" or results[i] == "sat":
-                result['' + properties[i]["name"]].append(results[i])
-            else:
-                result['' + properties[i]["name"]].append('no result')
-    else:
-        print("SMT solver reported an error")
-        exit()
+    if isinstance(output, bytes):
+        output = output.decode('utf-8')
 
-    return result
+    if output == "timeout":
+        return -1, "timeout"    
+
+    return 0, output.strip()

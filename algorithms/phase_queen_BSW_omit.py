@@ -124,7 +124,7 @@ rules.append({'idx': 67, 'from': 35, 'to': 19, 'guard': "true"})
 rules.append({'idx': 68, 'from': 2, 'to': 6, 'guard': "(> (+ qo0 qo1) 0)"})
 rules.append({'idx': 69, 'from': 4, 'to': 9, 'guard': "(> (+ qo0 qo1) 0)"})
 
-rules.append({'idx': 70, 'from': 20, 'to': 24 'guard': "(> (+ qo0 qo1) 0)"})
+rules.append({'idx': 70, 'from': 20, 'to': 24, 'guard': "(> (+ qo0 qo1) 0)"})
 rules.append({'idx': 71, 'from': 22, 'to': 27, 'guard': "(> (+ qo0 qo1) 0)"})
 
 # parameters, resilience condition

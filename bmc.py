@@ -11,7 +11,7 @@ initial_condition = helper.initial_condition
 property_check = helper.property_check
 path = helper.path
 clean_round = helper.clean_round
-call_solver_bmc = helper.call_solver_bmc
+call_solver = helper.call_solver
 
 def bounded_model_checking(algorithm, pkg, solver, diam):    
     """
@@ -43,6 +43,11 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
     round_constraint = [c for c in constraints if c['type'] == "round"]
 
     maxlength = diam 
+    timeout = 300
+
+    result = {}
+    for p in properties:
+        result[p['name']] = []
 
 	# check whether a clean round has to be imposed
     if round_constraint == []: 
@@ -68,7 +73,20 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
             smt_file.close()
 
 			# check the properties using cvc4 or z3
-            result = call_solver_bmc(solver, file_name, properties)           
+            error, solver_output = call_solver(solver, file_name, timeout)  
+            if error == -1:                    
+                return -1, solver_output
+
+            results = solver_output.split()
+    
+            if len(results) == len(properties):
+                for i in range(len(results)):
+                    if results[i] == "unsat" or results[i] == "sat":
+                        result['' + properties[i]["name"]].append(results[i])
+                    else:
+                        result['' + properties[i]["name"]].append('no result')
+            else:
+                return -1, "error"       
 
     else:
 		# if a clean round has to be imposed, check paths with at most (2 * length) transitions
@@ -101,7 +119,21 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
                 smt_file.close()
 
 				# check the properties using cvc4 or z3
-                result = call_solver_bmc(solver, file_name, properties)
+                error, solver_output = call_solver(solver, file_name, timeout)
+                
+                if error == -1:                    
+                    return -1, solver_output
+
+                results = solver_output.split()
+    
+                if len(results) == len(properties):
+                    for i in range(len(results)):
+                        if results[i] == "unsat" or results[i] == "sat":
+                            result['' + properties[i]["name"]].append(results[i])
+                        else:
+                            result['' + properties[i]["name"]].append('no result')
+                else:
+                    return -1, "error"
     
     str_result = ""
     for p in properties:
@@ -115,7 +147,7 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
             str_result += p['name'] + " holds\n"
 
     
-    return str_result
+    return 0, str_result
 
 if __name__ == "__main__":
     if len(sys.argv) < 5:
@@ -125,4 +157,6 @@ if __name__ == "__main__":
     pkg = str(sys.argv[2])
     solver = str(sys.argv[3])
     diam = int(sys.argv[4])
-    print(bounded_model_checking(alg, pkg, solver, diam))     
+
+    _, output = bounded_model_checking(alg, pkg, solver, diam)
+    print(output)

@@ -15,12 +15,12 @@ initial = [0, 1, 12, 13, 18, 19]
 rules = []
 rules.append({'idx': 0, 'from': 0, 'to': 2, 'guard': "(and (<= x1 (+ x0 fb)) (<= x0 (+ x1 (* 2 tb) fb)))"})
 rules.append({'idx': 1, 'from': 0, 'to': 3, 'guard': "(and (<= x1 (+ x0 fb)) (> x0 (- (+ x1 (* 2 tb)) fb)))"})
-rules.append({'idx': 2, 'from': 0, 'to': 4, 'guard': "(and (> x1 (- x0 fb)) (<= x1 (+ x0 (* 2 tb)) fb)))"})
+rules.append({'idx': 2, 'from': 0, 'to': 4, 'guard': "(and (> x1 (- x0 fb)) (<= x1 (+ x0 (* 2 tb) fb)))"})
 rules.append({'idx': 3, 'from': 0, 'to': 5, 'guard': "(and (> x1 (- x0 fb)) (> x1 (- (+ x0 (* 2 tb)) fb)))"})
 
 rules.append({'idx': 4, 'from': 1, 'to': 2, 'guard': "(and (<= x1 (+ x0 fb)) (<= x0 (+ x1 (* 2 tb) fb)))"})
 rules.append({'idx': 5, 'from': 1, 'to': 3, 'guard': "(and (<= x1 (+ x0 fb)) (> x0 (- (+ x1 (* 2 tb)) fb)))"})
-rules.append({'idx': 6, 'from': 1, 'to': 4, 'guard': "(and (> x1 (- x0 fb)) (<= x1 (+ x0 (* 2 tb)) fb)))"})
+rules.append({'idx': 6, 'from': 1, 'to': 4, 'guard': "(and (> x1 (- x0 fb)) (<= x1 (+ x0 (* 2 tb) fb)))"})
 rules.append({'idx': 7, 'from': 1, 'to': 5, 'guard': "(and (> x1 (- x0 fb)) (> x1 (- (+ x0 (* 2 tb)) fb)))"})
 
 rules.append({'idx': 8, 'from': 2, 'to': 6, 'guard': "(> (+ q0 qb) 0)"})
