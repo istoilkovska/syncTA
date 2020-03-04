@@ -15,7 +15,6 @@ def compute_diameter(algorithm, pkg, solver, start, end):
     """
     Computes the diameter of a given algorithm
     """
-    importlib.invalidate_caches()
     alg = importlib.import_module('.' + algorithm, package = pkg)
 
     local = alg.local
@@ -32,7 +31,7 @@ def compute_diameter(algorithm, pkg, solver, start, end):
     file_dir = os.path.dirname(os.path.realpath('__file__'))
     subdir = os.path.join(file_dir, "smt", "diameter")
     if not os.path.isdir(subdir):
-		    os.makedirs(subdir)
+		os.makedirs(subdir)
     file_name = os.path.join(subdir, algorithm + "_diam.smt")
 
     intro = introduction(params, rc, solver)    
