@@ -15,7 +15,6 @@ def compute_diameter(algorithm, pkg, solver, start, end):
     """
     Computes the diameter of a given algorithm
     """
-    importlib.invalidate_caches()
     alg = importlib.import_module('.' + algorithm, package = pkg)
 
     local = alg.local

@@ -461,9 +461,9 @@ def getRC(algorithm, pkg):
 def call_solver(solver, file_name, timeout):
     cvc4_timeout = timeout * 1000
     if solver == "cvc4":
-        smt = subprocess.Popen(["cvc4", "--lang", "smt2", "--incremental", "--tlimit={}".format(str(cvc4_timeout)), file_name], stdout=subprocess.PIPE)
+        smt = subprocess.Popen(["cvc4", "--lang", "smt2", "--incremental", file_name], stdout=subprocess.PIPE)
     elif solver == "z3":
-        smt = subprocess.Popen(["z3", "-smt2", "-T:{}".format(timeout), file_name], stdout=subprocess.PIPE)
+        smt = subprocess.Popen(["z3", "-smt2", file_name], stdout=subprocess.PIPE)
     
     try: 
         output = smt.communicate()[0]
