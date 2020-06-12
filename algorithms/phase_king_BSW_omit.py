@@ -211,17 +211,17 @@ faults = "omission"
 faulty = range(26, 52)
 max_faulty = "fo"
 
-faulty_king = list(range(42, 52))
-king = list(range(16, 26)) + faulty_king
+omit_king = list(range(42, 52))
+king = list(range(16, 26)) + omit_king
 phase = 4
 
 # configuration/transition constraints
 constraints = []
 constraints.append({'type': 'configuration', 'sum': 'eq', 'object': local, 'result': active})
 constraints.append({'type': 'configuration', 'sum': 'eq', 'object': faulty, 'result': max_faulty})
-constraints.append({'type': 'configuration', 'sum': 'eq', 'object': king, 'result': "1"})
+constraints.append({'type': 'configuration', 'sum': 'eq', 'object': king, 'result': 1})
 constraints.append({'type': 'transition', 'sum': 'eq', 'object': range(len(rules)), 'result': active})
-constraints.append({'type': 'round', 'sum': 'eq', 'object': faulty_king, 'result': 0})
+constraints.append({'type': 'round_config', 'sum': 'eq', 'object': omit_king, 'result': 0})
 
 properties = []
 properties.append({'name':'validity0', 'spec':'safety', 'initial':'(= (+ x0 y0) n)', 'qf':'some', 'reachable':'(not (= (+ x1 y1) 0))'})

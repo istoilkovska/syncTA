@@ -326,20 +326,52 @@ def path(start, end, local_list, rule_list, conf_symbol, trans_symbol, constrain
     return result 
 
 
-def clean_round(r, local_list, rule_list, conf_symbol, trans_symbol, constraints, L, r_constraint, phase):
+def clean_round_config(r, local_list, rule_list, conf_symbol, trans_symbol, constraints, L, r_constraint, phase):
     """
-	Generates the clean round constraint
+	Generates the clean round constraint imposed on a configuration
 	"""
     constants = ""
     result = ""
     round_constraint = ""
     result += "(and\n"
     for c in r_constraint:
-        round_constraint += add_constraint(r + 1, r + phase + 1, "c", c['sum'], c['object'], c['result']) + "\n"
+        round_constraint += add_constraint(r + 1, r + phase + 1, conf_symbol, c['sum'], c['object'], c['result']) + "\n"
 
     result += round_constraint
     result += ")\n"
     return constants + assertion(result)
+
+def clean_round_trans(r, local_list, rule_list, conf_symbol, trans_symbol, constraints, L, r_constraint, phase):
+    """
+	Generates the clean round constraint imposed on a transition
+	"""
+    constants = ""
+    result = ""
+    round_constraint = ""
+
+    send_str = {}    
+    for k in L:
+        send_str[k] = ""
+        for v in L[k]:
+            send_str[k] += conf_symbol + str(r) + "_" + str(v) + " "
+        if len(L[k]) > 1:
+            send_str[k] = "(+ " + send_str[k].strip() + ")"
+        else:
+            send_str[k] = send_str[k].strip()
+
+    result += "(and\n"
+    for c in r_constraint:
+        pre = c['pre']
+        snd = {k:v for (k,v) in L.items() if k in pre}
+        for k in snd:
+            pre = pre.replace(k, send_str[k])
+        constraint = add_constraint(r + 1, r + phase + 1, trans_symbol, c['sum'], c['object'], c['result'])     
+        round_constraint += "(=> {} {})\n".format(pre, constraint)
+
+    result += round_constraint
+    result += ")\n"
+    return constants + assertion(result)
+
 
 def compute_sub(guard_str):
     """

@@ -137,17 +137,17 @@ faults = "omission"
 faulty = list(range(24, 36))
 max_faulty = "fo"
 
-queen = list(range(12, 19)) + list(range(30, 36))
-faulty_queen = list(range(30, 36))
+omit_queen = list(range(30, 36))
+queen = list(range(12, 19)) + omit_queen
 phase = 3
 
 # configuration/transition constraints
 constraints = []
 constraints.append({'type': 'configuration', 'sum': 'eq', 'object': local, 'result': active})
 constraints.append({'type': 'configuration', 'sum': 'eq', 'object': faulty, 'result': max_faulty})
-constraints.append({'type': 'configuration', 'sum': 'eq', 'object': queen, 'result': "1"})
+constraints.append({'type': 'configuration', 'sum': 'eq', 'object': queen, 'result': 1})
 constraints.append({'type': 'transition', 'sum': 'eq', 'object': range(len(rules)), 'result': active})
-constraints.append({'type': 'round', 'sum': 'eq', 'object': faulty_queen, 'result': 0})
+constraints.append({'type': 'round_config', 'sum': 'eq', 'object': omit_queen, 'result': 0})
 
 properties = []
 properties.append({'name':'validity0', 'spec':'safety', 'initial':'(= (+ x0 y0) n)', 'qf':'some', 'reachable':'(not (= (+ x1 y1) 0))'})

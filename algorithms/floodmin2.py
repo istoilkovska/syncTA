@@ -41,7 +41,7 @@ constraints = []
 constraints.append({'type': 'configuration', 'sum': 'eq', 'object': local, 'result': active})
 constraints.append({'type': 'configuration', 'sum': 'le', 'object': faulty, 'result': max_faulty})
 constraints.append({'type': 'transition', 'sum': 'eq', 'object': range(len(rules)), 'result': active})
-constraints.append({'type': 'round', 'sum': 'le', 'object': crashed, 'result': 1})
+constraints.append({'type': 'round_config', 'sum': 'le', 'object': crashed, 'result': 1})
 
 properties = []
 properties.append({'name':'validity0', 'spec':'safety', 'initial':'(= v0 0)', 'qf':'last', 'reachable':'(> x0 0)'})

@@ -227,8 +227,9 @@ max_omission = "fo"
 byzantine = range(52, 60)
 max_byzantine = "1"
 
-faulty_king = list(range(42, 52)) + [52, 54, 56, 58]
-king = list(range(16, 26)) + faulty_king
+byz_king = [52, 54, 56, 58]
+omit_king = list(range(42, 52))
+king = list(range(16, 26)) + byz_king + omit_king
 phase = 4
 
 # configuration/transition constraints
@@ -236,11 +237,11 @@ constraints = []
 constraints.append({'type': 'configuration', 'sum': 'eq', 'object': local, 'result': active})
 constraints.append({'type': 'configuration', 'sum': 'eq', 'object': omission, 'result': max_omission})
 constraints.append({'type': 'configuration', 'sum': 'eq', 'object': byzantine, 'result': max_byzantine})
-constraints.append({'type': 'configuration', 'sum': 'eq', 'object': king, 'result': "1"})
+constraints.append({'type': 'configuration', 'sum': 'eq', 'object': king, 'result': 1})
 constraints.append({'type': 'transition', 'sum': 'eq', 'object': range(len(rules)), 'result': active})
-constraints.append({'type': 'round', 'sum': 'eq', 'object': faulty_king, 'result': 0})
+constraints.append({'type': 'round_config', 'sum': 'eq', 'object': byz_king + omit_king, 'result': 0})
 
 properties = []
 properties.append({'name':'validity0', 'spec':'safety', 'initial':'(= (+ x0 y0) (- n fb))', 'qf':'some', 'reachable':'(not (= (+ x1 y1) 0))'})
 properties.append({'name':'validity1', 'spec':'safety', 'initial':'(= (+ x1 y1) (- n fb))', 'qf':'some', 'reachable':'(not (= (+ x0 y0) 0))'})
-properties.append({'name':'agreement', 'spec':'safety', 'initial':'true', 'qf':'last', 'reachable':'(and (not (= (+ x0 y0) 0)) (not (= (x1 y1) 0)))'})
+properties.append({'name':'agreement', 'spec':'safety', 'initial':'true', 'qf':'last', 'reachable':'(and (not (= (+ x0 y0) 0)) (not (= (+ x1 y1) 0)))'})

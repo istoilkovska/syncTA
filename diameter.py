@@ -89,7 +89,7 @@ if __name__ == "__main__":
     pkg = str(sys.argv[2])
     solver = str(sys.argv[3])
     print('Computing diameter for ' + alg + ' using ' + solver + '...')
-    error, diam = compute_diameter(alg, pkg, solver, 0, 6)
+    error, diam = compute_diameter(alg, pkg, solver, 4, 5)
     if error != -1:
         print('Diameter: ' + str(diam))
     else:

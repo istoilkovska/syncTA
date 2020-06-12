@@ -84,19 +84,19 @@ rc = ["(> n 0)", "(>= tb 0)", "(>= fb 0)", "(>= tb fb)", "(> n (* 4 tb))"]
 # faults
 faults = "byzantine"
 faulty = list(range(18, 24))
-max_faulty = "1"
+max_faulty = 1
 
-queen = list(range(12, 18)) + [18, 20, 22]
-faulty_queen = [18, 20, 22]
+byz_queen = [18, 20, 22]
+queen = list(range(12, 18)) + byz_queen
 phase = 3
 
 # configuration/transition constraints
 constraints = []
 constraints.append({'type': 'configuration', 'sum': 'eq', 'object': local, 'result': active})
 constraints.append({'type': 'configuration', 'sum': 'eq', 'object': faulty, 'result': max_faulty})
-constraints.append({'type': 'configuration', 'sum': 'eq', 'object': queen, 'result': "1"})
+constraints.append({'type': 'configuration', 'sum': 'eq', 'object': queen, 'result': 1})
 constraints.append({'type': 'transition', 'sum': 'eq', 'object': range(len(rules)), 'result': active})
-constraints.append({'type': 'round', 'sum': 'eq', 'object': faulty_queen, 'result': 0})
+constraints.append({'type': 'round_config', 'sum': 'eq', 'object': byz_queen, 'result': 0})
 
 properties = []
 properties.append({'name':'validity0', 'spec':'safety', 'initial':'(= x0 (- n fb))', 'qf':'some', 'reachable':'(not (= x1 0))'})

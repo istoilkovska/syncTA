@@ -10,7 +10,8 @@ assertion = helper.assertion
 initial_condition = helper.initial_condition
 property_check = helper.property_check
 path = helper.path
-clean_round = helper.clean_round
+clean_round_config = helper.clean_round_config
+clean_round_trans = helper.clean_round_trans
 call_solver = helper.call_solver
 
 def bounded_model_checking(algorithm, pkg, solver, diam):    
@@ -40,7 +41,8 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
 
     intro = introduction(params, rc, solver)
 
-    round_constraint = [c for c in constraints if c['type'] == "round"]
+    round_config_constraint = [c for c in constraints if c['type'] == "round_config"]
+    round_trans_constraint = [c for c in constraints if c['type'] == "round_trans"]
 
     maxlength = diam 
     timeout = 300
@@ -50,7 +52,7 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
         result[p['name']] = []
 
 	# check whether a clean round has to be imposed
-    if round_constraint == []: 
+    if round_config_constraint == [] and round_trans_constraint == []: 
 		# if not, check paths with (length) many transitions
         for length in range(phase, maxlength + 1, phase):
             
@@ -104,7 +106,11 @@ def bounded_model_checking(algorithm, pkg, solver, diam):
                 smt_file.write(intro)    
                 
                 # impose clean round constraint
-                smt_path += clean_round(length1 - phase, local, rules, "c", "t", constraints, L, round_constraint, phase) + "\n"
+                if round_config_constraint != []:
+                    smt_path += clean_round_config(length1 - phase, local, rules, "c", "t", constraints, L, round_config_constraint, phase) + "\n"
+                if round_trans_constraint != []:
+                    smt_path += clean_round_trans(length1 - phase, local, rules, "c", "t", constraints, L, round_trans_constraint, phase) + "\n"
+
                 
 
                 smt_file.write(smt_path)

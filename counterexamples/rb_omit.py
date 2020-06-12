@@ -29,6 +29,7 @@ rules.append({'idx': 15, 'from': 5, 'to': 7, 'guard': "(>= (+ x y) (- n t))"})
 params = ["n", "t", "f"]
 active = "n"
 rc = ["(> n 0)", "(>= t 0)", "(> f t)", "(>= n (* 2 t))"]
+# RESILIENCE CONDITION INTRODUCING MORE FAULTS: n >= 2t rather than n > 2t
 
 # faults
 faults = "omission"

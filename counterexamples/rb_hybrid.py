@@ -29,6 +29,7 @@ rules.append({'idx': 15, 'from': 5, 'to': 7, 'guard': "(>= (+ x y fb) (- n tb to
 params = ["n", "tb", "to", "fb", "fo"]
 active = "(- n fb)"
 rc = ["(> n 0)", "(>= tb 0)", "(>= to 0)", "(>= fb 0)", "(>= fo 0)", "(>= tb fb)", "(>= to fo)", "(>= n (+ (* 2 to) (* 3 tb)))"]
+# RESILIENCE CONDITION INTRODUCING MORE FAULTS: n >= 2to + 3tb rather than n > 2to + 3tb
 
 # faults
 faults = "hybrid"
