@@ -31,7 +31,7 @@ def compute_diameter(algorithm, pkg, solver, start, end):
     file_dir = os.path.dirname(os.path.realpath('__file__'))
     subdir = os.path.join(file_dir, "smt", "diameter")
     if not os.path.isdir(subdir):
-		    os.makedirs(subdir)
+		os.makedirs(subdir)
     file_name = os.path.join(subdir, algorithm + "_diam.smt")
 
     intro = introduction(params, rc, solver)    
@@ -89,7 +89,7 @@ if __name__ == "__main__":
     pkg = str(sys.argv[2])
     solver = str(sys.argv[3])
     print('Computing diameter for ' + alg + ' using ' + solver + '...')
-    error, diam = compute_diameter(alg, pkg, solver, 0, 6)
+    error, diam = compute_diameter(alg, pkg, solver, 4, 5)
     if error != -1:
         print('Diameter: ' + str(diam))
     else:

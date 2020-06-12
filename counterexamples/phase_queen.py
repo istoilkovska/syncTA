@@ -73,6 +73,7 @@ rules.append({'idx': 41, 'from': 23, 'to': 19, 'guard': "true"})
 params = ["n", "t", "f"]
 active = "(- n (- f 1))"
 rc = ["(> n 0)", "(> t 0)", "(> f 0)", "(>= t f)", "(>= n (* 4 t))"]
+# RESILIENCE CONDITION INTRODUCING MORE FAULTS: n >= 4t rather than n > 4t
 
 # faults
 faults = "byzantine"
@@ -89,7 +90,7 @@ constraints.append({'type': 'configuration', 'sum': 'eq', 'object': local, 'resu
 constraints.append({'type': 'configuration', 'sum': 'eq', 'object': faulty, 'result': max_faulty})
 constraints.append({'type': 'configuration', 'sum': 'eq', 'object': queen, 'result': "1"})
 constraints.append({'type': 'transition', 'sum': 'eq', 'object': range(len(rules)), 'result': active})
-constraints.append({'type': 'round', 'sum': 'eq', 'object': faulty_queen, 'result': 0})
+constraints.append({'type': 'round_config', 'sum': 'eq', 'object': faulty_queen, 'result': 0})
 
 properties = []
 properties.append({'name':'validity0', 'spec':'safety', 'initial':'(= x0 (- n f))', 'qf':'some', 'reachable':'(not (= x1 0))'})

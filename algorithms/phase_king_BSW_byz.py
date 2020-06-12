@@ -139,7 +139,7 @@ constraints.append({'type': 'configuration', 'sum': 'eq', 'object': local, 'resu
 constraints.append({'type': 'configuration', 'sum': 'eq', 'object': faulty, 'result': max_faulty})
 constraints.append({'type': 'configuration', 'sum': 'eq', 'object': king, 'result': "1"})
 constraints.append({'type': 'transition', 'sum': 'eq', 'object': range(len(rules)), 'result': active})
-constraints.append({'type': 'round', 'sum': 'eq', 'object': faulty_king, 'result': 0})
+constraints.append({'type': 'round_config', 'sum': 'eq', 'object': faulty_king, 'result': 0})
 
 properties = []
 properties.append({'name':'validity0', 'spec':'safety', 'initial':'(= x0 (- n fb))', 'qf':'some', 'reachable':'(not (= x1 0))'})

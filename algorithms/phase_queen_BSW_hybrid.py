@@ -146,12 +146,13 @@ rc = ["(> n 0)", "(>= tb 0)", "(>= to 0)", "(>= fb 0)", "(>= fo 0)", "(>= tb fb)
 # faults
 faults = "hybrid"
 byzantine = list(range(18, 24))
-max_byzantine = "1"
+max_byzantine = 1
 omission = list(range(24, 42))
 max_omission = "fo"
 
-queen = list(range(12, 18)) + [18, 20, 22] + list(range(36, 42))
-faulty_queen = [18, 20, 22] + list(range(36, 42))
+byz_queen = [18, 20, 22]
+omit_queen = list(range(36, 42))
+queen = list(range(12, 18)) + byz_queen + omit_queen
 phase = 3
 
 # configuration/transition constraints
@@ -159,9 +160,9 @@ constraints = []
 constraints.append({'type': 'configuration', 'sum': 'eq', 'object': local, 'result': active})
 constraints.append({'type': 'configuration', 'sum': 'eq', 'object': byzantine, 'result': max_byzantine})
 constraints.append({'type': 'configuration', 'sum': 'eq', 'object': omission, 'result': max_omission})
-constraints.append({'type': 'configuration', 'sum': 'eq', 'object': queen, 'result': "1"})
+constraints.append({'type': 'configuration', 'sum': 'eq', 'object': queen, 'result': 1})
 constraints.append({'type': 'transition', 'sum': 'eq', 'object': range(len(rules)), 'result': active})
-constraints.append({'type': 'round', 'sum': 'eq', 'object': faulty_queen, 'result': 0})
+constraints.append({'type': 'round_config', 'sum': 'eq', 'object': byz_queen + omit_queen, 'result': 0})
 
 properties = []
 properties.append({'name':'validity0', 'spec':'safety', 'initial':'(= (+ x0 y0) (- n fb))', 'qf':'some', 'reachable':'(not (= (+ x1 y1) 0))'})
