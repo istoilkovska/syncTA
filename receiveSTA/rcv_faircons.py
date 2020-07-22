@@ -2,6 +2,8 @@
 local = range(11)
 # L states
 L = {"x0" : [0, 2, 3], "x1" : [1, 4], "cr0" : [5, 7, 8], "cr1" : [6, 9], "v0" : [0], "v1" : [1], "d0" : [2, 3], "d1" : [4]}
+# receive variables 
+rcv_vars = ["nr0", "nr1"]
 # initial states
 initial = [0, 1, 5, 6]
 
