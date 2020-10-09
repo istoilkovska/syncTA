@@ -30,7 +30,7 @@ def generate_sta_guards(algorithm, rcv_guards, parameters, rc, rcv_vars, snd_var
                 sta_guard = qe_output_to_guard(qe_output)
             else:
                 sta_guard = 'false'
-                print('Guard nr. {} could not be translated.'.format(seq_no))
+                print('Guard nr. {} could not be translated.'.format(idx))
                 print('The smt solver reported the following output:\n')
                 print(qe_output)
 

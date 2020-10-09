@@ -1,7 +1,7 @@
 # process local states
 local = range(34)
 # L states
-L = {"x0" : [0, 16], "x1" : [1, 17], "k0" : [22], "k1" : [23], "kf" : [30], "m0" : [4, 5, 20, 21], "m1" : [3, 5, 19, 21]}
+L = {"x0" : [0, 16], "x1" : [1, 17], "k0" : [22], "k1" : [23], "kb" : [30], "m0" : [4, 5, 20, 21], "m1" : [3, 5, 19, 21]}
 # initial states
 initial = [0, 1, 16, 17, 26, 27]
 
@@ -37,13 +37,13 @@ rules.append({'idx': 21, 'from': 5, 'to': 7, 'guard': "(and (<= m1 t) (>= m0 (- 
 rules.append({'idx': 22, 'from': 5, 'to': 8, 'guard': "(and (> m1 (- t f)) (< m1 (- n t)))"})
 rules.append({'idx': 23, 'from': 5, 'to': 9, 'guard': "(and (> m1 (- t f)) (>= m1 (- (- n t) f)))"})
 
-rules.append({'idx': 24, 'from': 6, 'to': 10, 'guard': "(> (+ k0 kf) 0)"})
-rules.append({'idx': 25, 'from': 6, 'to': 11, 'guard': "(> (+ k1 kf) 0)"})
+rules.append({'idx': 24, 'from': 6, 'to': 10, 'guard': "(> (+ k0 kb) 0)"})
+rules.append({'idx': 25, 'from': 6, 'to': 11, 'guard': "(> (+ k1 kb) 0)"})
 
 rules.append({'idx': 26, 'from': 7, 'to': 12, 'guard': "true"})
 
-rules.append({'idx': 27, 'from': 8, 'to': 13, 'guard': "(> (+ k0 kf) 0)"})
-rules.append({'idx': 28, 'from': 8, 'to': 14, 'guard': "(> (+ k1 kf) 0)"})
+rules.append({'idx': 27, 'from': 8, 'to': 13, 'guard': "(> (+ k0 kb) 0)"})
+rules.append({'idx': 28, 'from': 8, 'to': 14, 'guard': "(> (+ k1 kb) 0)"})
 
 rules.append({'idx': 29, 'from': 9, 'to': 15, 'guard': "true"})
 

@@ -118,6 +118,10 @@ rules.append({'idx': 69, 'from': 31, 'to': 33, 'guard': "true"})
 rules.append({'idx': 70, 'from': 33, 'to': 26, 'guard': "true"})
 rules.append({'idx': 71, 'from': 33, 'to': 27, 'guard': "true"})
 
+# when no king message is received, default to own value
+rules.append({'idx': 72, 'from': 6, 'to': 10, 'guard': "(>= kb 0)"})
+rules.append({'idx': 73, 'from': 8, 'to': 14, 'guard': "(>= kb 0)"})
+
 
 # parameters, resilience condition
 params = ["n", "tb", "fb"]

@@ -1,8 +1,9 @@
 import parsing
 import os
+import sys
 import generate_sta
 
-def translateSTA(benchmark):
+def translate_sta(benchmark):
     file_dir = os.path.dirname(os.path.realpath('__file__'))
       
     rcv_subdir = os.path.join(file_dir, 'receiveSTA')
@@ -66,12 +67,32 @@ def check_implication(benchmark):
         manual_guard = manual_guards[i]
     
         result = generate_sta.check_strength(benchmark, i, generated_guard, manual_guard, parameters, res_cond, snd_vars)
-        results[i] = result
+        results[i] = result  
 
-    print results
-    return True # TODO
+    if all(results[key] == 'unsat' for key in results):
+        return 'all'
+    elif all(results[key] == 'sat' for key in results):
+        return 'none'
+    else:
+        return 'some'
 
 
 if __name__ == '__main__':   
-    # translateSTA('faircons', 'receiveSTA')
-    check_implication('faircons')
+
+    if len(sys.argv) < 3:
+        print('Usage: python translateSTA.py $algorithm $check_implication')
+        exit()
+    alg = str(sys.argv[1])
+    check = bool(sys.argv[2])
+    
+    print('Translating receive STA of {}...'.format(alg))
+    snd_file_name = translate_sta(alg)
+    print('Tranlation stored in {}'.format(snd_file_name))
+
+
+    if check:
+        result = check_implication(alg)
+        if result != -1:
+            print('Guard implication: {} of the guards of the generated STA imply the guards of the manual STA'.format(result))
+        else:
+            print('There was an error in checking the guard implications.')
