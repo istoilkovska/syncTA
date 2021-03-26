@@ -132,11 +132,11 @@ rules.append({'idx': 74, 'from': 40, 'to': 24, 'guard': "true"})
 rules.append({'idx': 75, 'from': 41, 'to': 25, 'guard': "true"})
 
 # additional rules that introduce non-determinism when the queen is send-omission faulty
-rules.append({'idx': 76, 'from': 2, 'to': 6, 'guard': "(> (+ qo0 qo1) 0)"})
-rules.append({'idx': 77, 'from': 4, 'to': 9, 'guard': "(> (+ qo0 qo1) 0)"})
+rules.append({'idx': 76, 'from': 2, 'to': 6, 'guard': "(> (+ qo0 qo1 qb) 0)"})
+rules.append({'idx': 77, 'from': 4, 'to': 9, 'guard': "(> (+ qo0 qo1 qb) 0)"})
 
-rules.append({'idx': 78, 'from': 26, 'to': 30, 'guard': "(> (+ qo0 qo1) 0)"})
-rules.append({'idx': 79, 'from': 28, 'to': 33, 'guard': "(> (+ qo0 qo1) 0)"})
+rules.append({'idx': 78, 'from': 26, 'to': 30, 'guard': "(> (+ qo0 qo1 qb) 0)"})
+rules.append({'idx': 79, 'from': 28, 'to': 33, 'guard': "(> (+ qo0 qo1 qb) 0)"})
 
 # parameters, resilience condition
 params = ["n", "tb", "to", "fb", "fo"]

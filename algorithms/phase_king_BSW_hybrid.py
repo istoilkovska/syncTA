@@ -196,11 +196,11 @@ rules.append({'idx': 122, 'from': 50, 'to': 26, 'guard': "true"})
 rules.append({'idx': 123, 'from': 51, 'to': 27, 'guard': "true"})
 
 # additional rules that introduce non-determinism when the king is send-omission faulty
-rules.append({'idx': 124, 'from': 6, 'to': 10, 'guard': "(> (+ ko0 ko1) 0)"})
-rules.append({'idx': 125, 'from': 8, 'to': 14, 'guard': "(> (+ ko0 ko1) 0)"})
+rules.append({'idx': 124, 'from': 6, 'to': 10, 'guard': "(> (+ ko0 ko1 kb) 0)"})
+rules.append({'idx': 125, 'from': 8, 'to': 14, 'guard': "(> (+ ko0 ko1 kb) 0)"})
 
-rules.append({'idx': 126, 'from': 32, 'to': 36, 'guard': "(> (+ ko0 ko1) 0)"})
-rules.append({'idx': 127, 'from': 34, 'to': 40, 'guard': "(> (+ ko0 ko1) 0)"})
+rules.append({'idx': 126, 'from': 32, 'to': 36, 'guard': "(> (+ ko0 ko1 kb) 0)"})
+rules.append({'idx': 127, 'from': 34, 'to': 40, 'guard': "(> (+ ko0 ko1 kb) 0)"})
 
 # byzantine faulty process transitions
 rules.append({'idx': 128, 'from': 52, 'to': 54, 'guard': "true"})

@@ -28,12 +28,11 @@ output.write("Experimental results for bounded model checking with the " + solve
 output.write("Counterexamples\n\n")
 
 for alg in alg_list:
-    start_time = time.time()
     print("Checking " + alg + " with " + solver + " ...\n")
     output.write("Algorithm " + alg + "\n")
 
     start = time.time()
-    diam = compute_diameter(alg, "counterexamples", solver, 0, 5)
+    err, diam = compute_diameter(alg, "counterexamples", solver, 0, 5)
     diam_time = time.time() - start
     print("Diameter " + str(diam) + "\n")
     pretty_time = "%s%s" % (time.strftime("%H:%M:%S", time.gmtime(diam_time)), str(diam_time)[str(diam_time).index("."):8])
@@ -41,7 +40,7 @@ for alg in alg_list:
 
     output.write("bounded model checking results:\n")
     start = time.time()
-    result = bounded_model_checking(alg, "counterexamples", solver, diam)
+    err, result = bounded_model_checking(alg, "counterexamples", solver, diam)
     bmc_time = time.time() - start
     print(result)
     output.write(result)

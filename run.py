@@ -33,7 +33,7 @@ for alg in alg_list:
     output.write("Algorithm " + alg + "\n")
 
     start = time.time()
-    diam = compute_diameter(alg, "algorithms", solver, 0, 5)
+    err, diam = compute_diameter(alg, "algorithms", solver, 0, 5)
     diam_time = time.time() - start
     print("Diameter " + str(diam) + "\n")
     pretty_time = "%s%s" % (time.strftime("%H:%M:%S", time.gmtime(diam_time)), str(diam_time)[str(diam_time).index("."):8])
